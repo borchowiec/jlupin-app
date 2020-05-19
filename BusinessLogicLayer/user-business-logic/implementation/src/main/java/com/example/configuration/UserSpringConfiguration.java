@@ -1,5 +1,6 @@
 package com.example.configuration;
 
+import com.example.service.interfaces.UserStorage;
 import com.jlupin.impl.client.util.JLupinClientUtil;
 import com.jlupin.interfaces.client.delegator.JLupinDelegator;
 import com.jlupin.interfaces.common.enums.PortType;
@@ -18,15 +19,15 @@ public class UserSpringConfiguration {
         return JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.JLRMC);
     }
 
-    // @Bean(name = "exampleService")
-    // public ExampleService getExampleService() {
-    //     return JLupinClientUtil.generateRemote(getJLupinDelegator(), "example-microservice", ExampleService.class);
-    // }
+    @Bean(name = "userStorage")
+    public UserStorage getExampleService() {
+        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "user-storage", UserStorage.class);
+    }
 
     @Bean(name = "jLupinRegularExpressionToRemotelyEnabled")
     public List getRemotelyBeanList() {
         List<String> list = new ArrayList<>();
-        // list.add("<REMOTE_SERVICE_NAME>");
+        list.add("userService");
         return list;
     }
 }

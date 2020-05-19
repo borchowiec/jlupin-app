@@ -1,5 +1,6 @@
 package com.example.configuration;
 
+import com.example.service.interfaces.UserService;
 import com.jlupin.impl.client.util.JLupinClientUtil;
 import com.jlupin.interfaces.client.delegator.JLupinDelegator;
 import com.jlupin.interfaces.common.enums.PortType;
@@ -17,9 +18,9 @@ public class RestApiSpringConfiguration {
         return JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.JLRMC);
     }
 
-    // @Bean(name = "exampleService")
-    // public ExampleService getExampleService() {
-    //     return JLupinClientUtil.generateRemote(getJLupinDelegator(), "example-microservice", ExampleService.class);
-    // }
+    @Bean(name = "userService")
+    public UserService getUserService() {
+        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "user", UserService.class);
+    }
 }
 

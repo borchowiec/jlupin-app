@@ -18,15 +18,10 @@ public class UserStorageSpringConfiguration {
         return JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.JLRMC);
     }
 
-    // @Bean(name = "exampleService")
-    // public ExampleService getExampleService() {
-    //     return JLupinClientUtil.generateRemote(getJLupinDelegator(), "example-microservice", ExampleService.class);
-    // }
-
     @Bean(name = "jLupinRegularExpressionToRemotelyEnabled")
     public List getRemotelyBeanList() {
         List<String> list = new ArrayList<>();
-        // list.add("<REMOTE_SERVICE_NAME>");
+        list.add("userStorage");
         return list;
     }
 }
