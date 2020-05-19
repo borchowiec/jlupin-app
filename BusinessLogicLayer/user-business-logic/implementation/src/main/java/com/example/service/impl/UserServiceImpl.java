@@ -1,14 +1,19 @@
 package com.example.service.impl;
 
 import com.example.common.pojo.AddUserRequest;
+import com.example.common.pojo.AuthenticateUserRequest;
+import com.example.common.pojo.User;
 import com.example.service.interfaces.UserService;
 import com.example.service.interfaces.UserStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.security.auth.login.CredentialException;
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserService {
@@ -35,5 +40,20 @@ public class UserServiceImpl implements UserService {
         addUserRequest.setPassword(passwordEncoder.encode(addUserRequest.getPassword()));
 
         return userStorage.addUser(addUserRequest);
+    }
+
+    @Override
+    public String getAuthenticationToken(AuthenticateUserRequest request) {
+        // get user
+        String username = request.getUsername();
+        User user = userStorage.findByUsername(username);
+
+        // check password
+        boolean validPassword = passwordEncoder.matches(request.getPassword(), user.getPassword());
+        if (!validPassword) {
+            throw new RuntimeException("Wrong credentials");
+        }
+
+        return user.toString();
     }
 }

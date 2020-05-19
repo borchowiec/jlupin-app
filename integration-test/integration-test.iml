@@ -18,10 +18,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
     <orderEntry type="module" module-name="common-util" scope="TEST" />
     <orderEntry type="module" module-name="user-interfaces" scope="TEST" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-web:5.2.1.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-beans:5.0.8.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-core:5.0.8.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-jcl:5.0.8.RELEASE" level="project" />
     <orderEntry type="module" module-name="user-storage-interfaces" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Maven: com.jlupin:jlupin-client-assembly:1.6.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-api:1.8.0-alpha2" level="project" />

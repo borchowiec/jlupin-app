@@ -1,6 +1,8 @@
-package com.example.dao.pojo;
+package com.example.common.pojo;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private long id;
     private String username;
     private String password;
