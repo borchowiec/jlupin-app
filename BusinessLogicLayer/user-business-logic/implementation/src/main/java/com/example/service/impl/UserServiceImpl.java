@@ -14,7 +14,15 @@ public class UserServiceImpl implements UserService {
     private UserStorage userStorage;
 
     @Override
-    public String addUser(AddUserRequest addUserRequest) {
+    public boolean addUser(AddUserRequest addUserRequest) {
+        // check if user already exists
+        String username = addUserRequest.getUsername();
+        boolean alreadyExists = userStorage.existsByUsername(username);
+        if (alreadyExists) {
+            String message = "User of username: " + username + " already exists.";
+            return false;
+        }
+
         return userStorage.addUser(addUserRequest);
     }
 }

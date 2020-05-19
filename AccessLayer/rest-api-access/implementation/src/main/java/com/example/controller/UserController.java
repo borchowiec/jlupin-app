@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 public class UserController {
     @Autowired
@@ -15,7 +17,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/add-user")
-    public String getTest(@RequestBody AddUserRequest addUserRequest) {
+    public boolean addUser(@RequestBody @Valid AddUserRequest addUserRequest) {
         return userService.addUser(addUserRequest);
     }
 }

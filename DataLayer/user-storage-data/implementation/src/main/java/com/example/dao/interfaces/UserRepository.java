@@ -4,4 +4,6 @@ import com.example.dao.pojo.User;
 
 public interface UserRepository {
     User put(User user);
+
+    boolean existsByUsername(String username);
 }

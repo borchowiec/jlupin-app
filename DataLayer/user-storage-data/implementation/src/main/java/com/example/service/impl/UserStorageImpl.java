@@ -16,11 +16,17 @@ public class UserStorageImpl implements UserStorage {
     private UserRepository userRepository;
 
     @Override
-    public String addUser(AddUserRequest addUserRequest) {
+    public boolean addUser(AddUserRequest addUserRequest) {
         User user = new User();
         user.setPassword(addUserRequest.getPassword());
         user.setUsername(addUserRequest.getUsername());
 
-        return userRepository.put(user).toString();
+        User put = userRepository.put(user);
+        return put != null;
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

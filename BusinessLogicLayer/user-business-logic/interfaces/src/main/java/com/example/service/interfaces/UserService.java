@@ -1,7 +1,8 @@
 package com.example.service.interfaces;
 
 import com.example.common.pojo.AddUserRequest;
+import org.springframework.http.ResponseEntity;
 
 public interface UserService {
-    String addUser(AddUserRequest addUserRequest);
+    boolean addUser(AddUserRequest addUserRequest);
 }

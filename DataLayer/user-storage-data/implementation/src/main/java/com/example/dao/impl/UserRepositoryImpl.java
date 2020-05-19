@@ -21,4 +21,9 @@ public class UserRepositoryImpl implements UserRepository {
         users.put(copy.getId(), copy);
         return copy;
     }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return users.entrySet().stream().anyMatch(entry -> entry.getValue().getUsername().equals(username));
+    }
 }
