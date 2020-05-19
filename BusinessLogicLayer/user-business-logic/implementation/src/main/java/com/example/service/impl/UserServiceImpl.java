@@ -3,8 +3,11 @@ package com.example.service.impl;
 import com.example.common.pojo.AddUserRequest;
 import com.example.service.interfaces.UserService;
 import com.example.service.interfaces.UserStorage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service(value = "userService")
@@ -12,6 +15,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     @Qualifier("userStorage")
     private UserStorage userStorage;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     public boolean addUser(AddUserRequest addUserRequest) {
@@ -22,6 +30,9 @@ public class UserServiceImpl implements UserService {
             String message = "User of username: " + username + " already exists.";
             return false;
         }
+
+        // encode password
+        addUserRequest.setPassword(passwordEncoder.encode(addUserRequest.getPassword()));
 
         return userStorage.addUser(addUserRequest);
     }
