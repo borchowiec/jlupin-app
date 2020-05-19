@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="rest-api-implementation" />
+        <module name="user-interfaces" />
+        <module name="common-util" />
+        <module name="user-storage-interfaces" />
+        <module name="user-storage-implementation" />
+        <module name="user-implementation" />
+        <module name="integration-test" />
+        <module name="common-pojo" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common-pojo" target="1.8" />
+      <module name="common-util" target="1.8" />
+      <module name="integration-test" target="1.8" />
+      <module name="jlupin-application" target="1.8" />
+      <module name="rest-api-implementation" target="1.8" />
+      <module name="user-implementation" target="1.8" />
+      <module name="user-interfaces" target="1.8" />
+      <module name="user-storage-implementation" target="1.8" />
+      <module name="user-storage-interfaces" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

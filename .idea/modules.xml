@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/common-pojo/common-pojo.iml" filepath="$PROJECT_DIR$/common-pojo/common-pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common-util/common-util.iml" filepath="$PROJECT_DIR$/common-util/common-util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/integration-test/integration-test.iml" filepath="$PROJECT_DIR$/integration-test/integration-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jlupin-application.iml" filepath="$PROJECT_DIR$/jlupin-application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AccessLayer/rest-api-access/implementation/rest-api-implementation.iml" filepath="$PROJECT_DIR$/AccessLayer/rest-api-access/implementation/rest-api-implementation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BusinessLogicLayer/user-business-logic/implementation/user-implementation.iml" filepath="$PROJECT_DIR$/BusinessLogicLayer/user-business-logic/implementation/user-implementation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BusinessLogicLayer/user-business-logic/interfaces/user-interfaces.iml" filepath="$PROJECT_DIR$/BusinessLogicLayer/user-business-logic/interfaces/user-interfaces.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DataLayer/user-storage-data/implementation/user-storage-implementation.iml" filepath="$PROJECT_DIR$/DataLayer/user-storage-data/implementation/user-storage-implementation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DataLayer/user-storage-data/interfaces/user-storage-interfaces.iml" filepath="$PROJECT_DIR$/DataLayer/user-storage-data/interfaces/user-storage-interfaces.iml" />
+    </modules>
+  </component>
+</project>
