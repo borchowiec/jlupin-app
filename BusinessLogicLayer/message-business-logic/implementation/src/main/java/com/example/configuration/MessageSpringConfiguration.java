@@ -18,14 +18,10 @@ public class MessageSpringConfiguration {
         return JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.JLRMC);
     }
 
-    // @Bean(name = "exampleService")
-    // public ExampleService getExampleService() {
-    //     return JLupinClientUtil.generateRemote(getJLupinDelegator(), "example-microservice", ExampleService.class);
-    // }
-
     @Bean(name = "jLupinRegularExpressionToRemotelyEnabled")
     public List getRemotelyBeanList() {
         List<String> list = new ArrayList<>();
+        list.add("messageService");
         // list.add("<REMOTE_SERVICE_NAME>");
         return list;
     }

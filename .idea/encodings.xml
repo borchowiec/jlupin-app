@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/AccessLayer/rest-api-access/implementation" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BusinessLogicLayer/message-business-logic/implementation" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BusinessLogicLayer/message-business-logic/interfaces" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/BusinessLogicLayer/user-business-logic/implementation" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/BusinessLogicLayer/user-business-logic/interfaces" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/DataLayer/user-storage-data/implementation" charset="UTF-8" />

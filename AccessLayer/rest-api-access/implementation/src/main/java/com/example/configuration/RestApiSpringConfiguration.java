@@ -1,6 +1,7 @@
 package com.example.configuration;
 
 import com.example.bean.impl.AuthenticationFilter;
+import com.example.service.interfaces.MessageService;
 import com.example.service.interfaces.UserService;
 import com.jlupin.impl.client.util.JLupinClientUtil;
 import com.jlupin.interfaces.client.delegator.JLupinDelegator;
@@ -31,6 +32,11 @@ public class RestApiSpringConfiguration {
         authenticationFilter.setFilter(new AuthenticationFilter(getUserService()));
         authenticationFilter.addUrlPatterns("/add-message");
         return authenticationFilter;
+    }
+
+    @Bean(name = "messageService")
+    public MessageService getMessageService() {
+        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "message", MessageService.class);
     }
 }
 

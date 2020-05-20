@@ -3,7 +3,6 @@ package com.example.bean.impl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.bean.interfaces.TokenProvider;
 import com.example.common.pojo.User;
 import org.slf4j.Logger;

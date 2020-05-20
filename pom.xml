@@ -51,6 +51,8 @@
         <module>DataLayer/user-storage-data/implementation</module>
         <module>AccessLayer/rest-api-access/implementation</module>
         <module>integration-test</module>
+        <module>BusinessLogicLayer/message-business-logic/interfaces</module>
+        <module>BusinessLogicLayer/message-business-logic/implementation</module>
     </modules>
 
     <properties>

@@ -9,12 +9,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="rest-api-implementation" />
         <module name="user-interfaces" />
-        <module name="user-storage-interfaces" />
         <module name="common-util" />
+        <module name="message-interfaces" />
+        <module name="user-storage-interfaces" />
         <module name="user-storage-implementation" />
         <module name="user-implementation" />
         <module name="integration-test" />
         <module name="common-pojo" />
+        <module name="message-implementation" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -22,6 +24,8 @@
       <module name="common-util" target="1.8" />
       <module name="integration-test" target="1.8" />
       <module name="jlupin-application" target="1.8" />
+      <module name="message-implementation" target="1.8" />
+      <module name="message-interfaces" target="1.8" />
       <module name="rest-api-implementation" target="1.8" />
       <module name="user-implementation" target="1.8" />
       <module name="user-interfaces" target="1.8" />
