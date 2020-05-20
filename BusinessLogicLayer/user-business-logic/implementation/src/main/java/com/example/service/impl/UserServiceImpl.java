@@ -63,4 +63,9 @@ public class UserServiceImpl implements UserService {
         response.setToken(token);
         return response;
     }
+
+    @Override
+    public boolean isTokenValid(String token) {
+        return tokenProvider.isValid(token);
+    }
 }

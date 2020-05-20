@@ -1,7 +1,9 @@
 package com.example.bean.impl;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.bean.interfaces.TokenProvider;
 import com.example.common.pojo.User;
 import org.slf4j.Logger;
@@ -56,5 +58,46 @@ public class JwtTokenProviderImpl implements TokenProvider {
                 .withIssuedAt(now)
                 .withExpiresAt(expiryDate)
                 .sign(algorithm);
+    }
+
+    @Override
+    public boolean isValid(String token) {
+        // load file with properties
+        File root = new File(System.getProperty("user.dir"));
+        String propertiesFilePath = root.getAbsolutePath() + File.separator + "application.properties";
+        InputStream inputStream;
+        try {
+            inputStream = Files.newInputStream(Paths.get(propertiesFilePath));
+        } catch (IOException e) {
+            throw new IllegalStateException("Cannot find " + propertiesFilePath + " file.");
+        }
+
+        // load properties
+        Properties properties = new Properties();
+        try {
+            properties.load(inputStream);
+        } catch (IOException e) {
+            throw new IllegalStateException("Cannot load properties from file " + propertiesFilePath + ".");
+        }
+
+        // get properties
+        String secret = properties.getProperty("secret");
+
+        if (!token.startsWith("Bearer ")) {
+            return false;
+        }
+
+        // remove 'bearer '
+        token = token.substring(7);
+
+        // verify token
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        try {
+            verifier.verify(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
