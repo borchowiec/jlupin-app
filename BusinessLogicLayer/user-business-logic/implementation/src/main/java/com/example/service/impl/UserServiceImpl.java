@@ -3,6 +3,7 @@ package com.example.service.impl;
 import com.example.bean.interfaces.TokenProvider;
 import com.example.common.pojo.AddUserRequest;
 import com.example.common.pojo.AuthenticateUserRequest;
+import com.example.common.pojo.AuthenticateUserResponse;
 import com.example.common.pojo.User;
 import com.example.service.interfaces.UserService;
 import com.example.service.interfaces.UserStorage;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getAuthenticationToken(AuthenticateUserRequest request) {
+    public AuthenticateUserResponse getAuthenticationToken(AuthenticateUserRequest request) {
         // get user
         String username = request.getUsername();
         User user = userStorage.findByUsername(username);
@@ -57,6 +58,9 @@ public class UserServiceImpl implements UserService {
         }
 
         // generate token
-        return tokenProvider.generateToken(user);
+        AuthenticateUserResponse response = new AuthenticateUserResponse();
+        String token = tokenProvider.generateToken(user);
+        response.setToken(token);
+        return response;
     }
 }

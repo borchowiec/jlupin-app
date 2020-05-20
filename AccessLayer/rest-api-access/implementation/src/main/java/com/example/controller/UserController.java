@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.common.pojo.AddUserRequest;
 import com.example.common.pojo.AuthenticateUserRequest;
+import com.example.common.pojo.AuthenticateUserResponse;
 import com.example.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/authenticate")
-    public String authenticateUser(@RequestBody AuthenticateUserRequest request) {
+    public AuthenticateUserResponse authenticateUser(@RequestBody AuthenticateUserRequest request) {
         return userService.getAuthenticationToken(request);
     }
 }
