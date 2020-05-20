@@ -3,6 +3,6 @@ package com.example.service.interfaces;
 import com.example.common.pojo.AddMessageRequest;
 import org.springframework.http.HttpStatus;
 
-public interface MessageService {
-    HttpStatus addMessage(AddMessageRequest request, String authenticationToken);
+public interface MessageStorage {
+    HttpStatus addMessage(AddMessageRequest request);
 }

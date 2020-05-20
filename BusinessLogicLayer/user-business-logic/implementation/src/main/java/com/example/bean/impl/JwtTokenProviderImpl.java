@@ -3,6 +3,7 @@ package com.example.bean.impl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.bean.interfaces.TokenProvider;
 import com.example.common.pojo.User;
 import org.slf4j.Logger;
@@ -81,5 +82,14 @@ public class JwtTokenProviderImpl implements TokenProvider {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public long getId(String token) {
+        // remove 'Bearer '
+        token = token.substring(7);
+
+        DecodedJWT jwt = JWT.decode(token);
+        return Long.parseLong(jwt.getSubject());
     }
 }

@@ -20,6 +20,12 @@
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.2.1.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -53,6 +59,8 @@
         <module>integration-test</module>
         <module>BusinessLogicLayer/message-business-logic/interfaces</module>
         <module>BusinessLogicLayer/message-business-logic/implementation</module>
+        <module>DataLayer/message-storage-data/interfaces</module>
+        <module>DataLayer/message-storage-data/implementation</module>
     </modules>
 
     <properties>

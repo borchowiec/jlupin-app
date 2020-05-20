@@ -10,7 +10,7 @@
         <relativePath>./../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>message-interfaces</artifactId>
+    <artifactId>message-storage-interfaces</artifactId>
 
     <properties>
         <main.dir>${project.basedir}/../../../</main.dir>

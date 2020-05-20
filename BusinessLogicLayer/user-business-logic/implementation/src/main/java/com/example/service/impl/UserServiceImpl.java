@@ -68,4 +68,11 @@ public class UserServiceImpl implements UserService {
     public boolean isTokenValid(String token) {
         return tokenProvider.isValid(token);
     }
+
+    @Override
+    public long getUserIdFromToken(String token) {
+        long id = tokenProvider.getId(token);
+        logger.info(String.valueOf(id));
+        return id;
+    }
 }

@@ -14,6 +14,8 @@
         <option value="$PROJECT_DIR$/integration-test/pom.xml" />
         <option value="$PROJECT_DIR$/BusinessLogicLayer/message-business-logic/interfaces/pom.xml" />
         <option value="$PROJECT_DIR$/BusinessLogicLayer/message-business-logic/implementation/pom.xml" />
+        <option value="$PROJECT_DIR$/DataLayer/message-storage-data/interfaces/pom.xml" />
+        <option value="$PROJECT_DIR$/DataLayer/message-storage-data/implementation/pom.xml" />
       </list>
     </option>
   </component>
