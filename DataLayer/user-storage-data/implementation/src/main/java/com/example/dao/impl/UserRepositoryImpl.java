@@ -34,4 +34,9 @@ public class UserRepositoryImpl implements UserRepository {
                 .filter(user -> user.getUsername().equals(username))
                 .findAny();
     }
+
+    @Override
+    public User findById(long id) {
+        return users.get(id);
+    }
 }

@@ -1,12 +1,15 @@
 package com.example.service.impl;
 
 import com.example.common.pojo.AddUserRequest;
-import com.example.dao.interfaces.UserRepository;
 import com.example.common.pojo.User;
+import com.example.dao.interfaces.UserRepository;
 import com.example.service.interfaces.UserStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Service(value = "userStorage")
 public class UserStorageImpl implements UserStorage {
@@ -34,5 +37,14 @@ public class UserStorageImpl implements UserStorage {
         return userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Wrong credentials"));
+    }
+
+    @Override
+    public List<User> findByIds(long... ids) {
+        List<User> users = new LinkedList();
+        for (long id : ids) {
+            users.add(userRepository.findById(id));
+        }
+        return users;
     }
 }
