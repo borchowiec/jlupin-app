@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import com.example.common.pojo.AddMessageRequest;
+import com.example.common.pojo.Conversation;
 import com.example.common.pojo.Message;
 import com.example.dao.interfaces.MessageRepository;
 import com.example.service.interfaces.MessageStorage;
@@ -20,5 +21,10 @@ public class MessageStorageImpl implements MessageStorage {
         Message message = new Message(request);
         messageRepository.addMessage(message);
         return HttpStatus.OK;
+    }
+
+    @Override
+    public Conversation getConversation(long interlocutorA, long interlocutorB) {
+        return messageRepository.getConversation(interlocutorA, interlocutorB);
     }
 }

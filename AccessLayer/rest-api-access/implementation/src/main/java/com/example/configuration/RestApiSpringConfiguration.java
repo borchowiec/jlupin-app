@@ -27,10 +27,10 @@ public class RestApiSpringConfiguration {
     }
 
     @Bean
-    public FilterRegistrationBean<AuthenticationFilter> authenticationFilter(){
+    public FilterRegistrationBean<AuthenticationFilter> authenticationFilter() {
         FilterRegistrationBean<AuthenticationFilter> authenticationFilter = new FilterRegistrationBean<>();
         authenticationFilter.setFilter(new AuthenticationFilter(getUserService()));
-        authenticationFilter.addUrlPatterns("/add-message");
+        authenticationFilter.addUrlPatterns("/add-message", "/conversation/*");
         return authenticationFilter;
     }
 

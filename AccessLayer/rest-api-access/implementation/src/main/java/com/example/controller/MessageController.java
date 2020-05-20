@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.pojo.AddMessageRequest;
+import com.example.common.pojo.Conversation;
 import com.example.service.interfaces.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -29,5 +27,11 @@ public class MessageController {
                                         @RequestHeader("Authorization") String token) {
         HttpStatus httpStatus = messageService.addMessage(request, token);
         return new ResponseEntity<>(httpStatus);
+    }
+
+    @GetMapping("/conversation/{interlocutorId}")
+    public Conversation getConversation(@PathVariable long interlocutorId,
+                                        @RequestHeader("Authorization") String token) {
+        return messageService.getConversation(interlocutorId, token);
     }
 }

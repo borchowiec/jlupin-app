@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import com.example.common.pojo.AddMessageRequest;
+import com.example.common.pojo.Conversation;
 import com.example.service.interfaces.MessageService;
 import com.example.service.interfaces.MessageStorage;
 import com.example.service.interfaces.UserService;
@@ -29,5 +30,11 @@ public class MessageServiceImpl implements MessageService {
         long sender = userService.getUserIdFromToken(authenticationToken);
         request.setSender(sender);
         return messageStorage.addMessage(request);
+    }
+
+    @Override
+    public Conversation getConversation(long interlocutorA, String authenticationToken) {
+        long interlocutorB = userService.getUserIdFromToken(authenticationToken);
+        return messageStorage.getConversation(interlocutorA, interlocutorB);
     }
 }
