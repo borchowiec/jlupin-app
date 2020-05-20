@@ -22,9 +22,10 @@ import java.util.Properties;
 public class JwtTokenProviderImpl implements TokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProviderImpl.class);
+    private final String SECRET;
+    private final int EXPIRATION_TIME;
 
-    @Override
-    public String generateToken(User user) {
+    public JwtTokenProviderImpl() {
         // load file with properties
         File root = new File(System.getProperty("user.dir"));
         String propertiesFilePath = root.getAbsolutePath() + File.separator + "application.properties";
@@ -44,15 +45,18 @@ public class JwtTokenProviderImpl implements TokenProvider {
         }
 
         // get properties
-        String secret = properties.getProperty("secret");
-        int expirationTime = Integer.parseInt(properties.getProperty("expirationInMs"));
+        SECRET = properties.getProperty("secret");
+        EXPIRATION_TIME = Integer.parseInt(properties.getProperty("expirationInMs"));
+    }
 
+    @Override
+    public String generateToken(User user) {
         // setting expiration time
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + expirationTime);
+        Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
 
         // generate token
-        Algorithm algorithm = Algorithm.HMAC256(secret);
+        Algorithm algorithm = Algorithm.HMAC256(SECRET);
         return JWT.create()
                 .withSubject(String.valueOf(user.getId()))
                 .withIssuedAt(now)
@@ -62,36 +66,15 @@ public class JwtTokenProviderImpl implements TokenProvider {
 
     @Override
     public boolean isValid(String token) {
-        // load file with properties
-        File root = new File(System.getProperty("user.dir"));
-        String propertiesFilePath = root.getAbsolutePath() + File.separator + "application.properties";
-        InputStream inputStream;
-        try {
-            inputStream = Files.newInputStream(Paths.get(propertiesFilePath));
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot find " + propertiesFilePath + " file.");
-        }
-
-        // load properties
-        Properties properties = new Properties();
-        try {
-            properties.load(inputStream);
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot load properties from file " + propertiesFilePath + ".");
-        }
-
-        // get properties
-        String secret = properties.getProperty("secret");
-
         if (!token.startsWith("Bearer ")) {
             return false;
         }
 
-        // remove 'bearer '
+        // remove 'Bearer '
         token = token.substring(7);
 
         // verify token
-        Algorithm algorithm = Algorithm.HMAC256(secret);
+        Algorithm algorithm = Algorithm.HMAC256(SECRET);
         JWTVerifier verifier = JWT.require(algorithm).build();
         try {
             verifier.verify(token);
