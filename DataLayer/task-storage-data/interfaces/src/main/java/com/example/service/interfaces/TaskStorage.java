@@ -8,6 +8,6 @@ public interface TaskStorage {
     Task save(Task task);
     List<Task> getUserTasks(long userId);
     Task getTaskById(long task);
-    Task put(Task task);
+    Task insert(Task task);
     boolean delete(long task);
 }

@@ -11,6 +11,8 @@
       <module fileurl="file://$PROJECT_DIR$/DataLayer/message-storage-data/implementation/message-storage-implementation.iml" filepath="$PROJECT_DIR$/DataLayer/message-storage-data/implementation/message-storage-implementation.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataLayer/message-storage-data/interfaces/message-storage-interfaces.iml" filepath="$PROJECT_DIR$/DataLayer/message-storage-data/interfaces/message-storage-interfaces.iml" />
       <module fileurl="file://$PROJECT_DIR$/AccessLayer/rest-api-access/implementation/rest-api-implementation.iml" filepath="$PROJECT_DIR$/AccessLayer/rest-api-access/implementation/rest-api-implementation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BusinessLogicLayer/task-business-logic/implementation/task-implementation.iml" filepath="$PROJECT_DIR$/BusinessLogicLayer/task-business-logic/implementation/task-implementation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BusinessLogicLayer/task-business-logic/interfaces/task-interfaces.iml" filepath="$PROJECT_DIR$/BusinessLogicLayer/task-business-logic/interfaces/task-interfaces.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataLayer/task-storage-data/implementation/task-storage-implementation.iml" filepath="$PROJECT_DIR$/DataLayer/task-storage-data/implementation/task-storage-implementation.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataLayer/task-storage-data/interfaces/task-storage-interfaces.iml" filepath="$PROJECT_DIR$/DataLayer/task-storage-data/interfaces/task-storage-interfaces.iml" />
       <module fileurl="file://$PROJECT_DIR$/BusinessLogicLayer/user-business-logic/implementation/user-implementation.iml" filepath="$PROJECT_DIR$/BusinessLogicLayer/user-business-logic/implementation/user-implementation.iml" />

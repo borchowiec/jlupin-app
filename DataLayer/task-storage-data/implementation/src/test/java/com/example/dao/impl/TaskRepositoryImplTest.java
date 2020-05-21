@@ -86,7 +86,7 @@ class TaskRepositoryImplTest {
     }
 
     @Test
-    void put_twoTasksInARow_shouldHaveDifferentIds() {
+    void insert_twoTasksInARow_shouldHaveDifferentIds() {
         // given
         LocalDateTime time = LocalDateTime.now();
         Task task1 = new Task(-1L, 1L, "Some task message", time, TODO);

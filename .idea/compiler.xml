@@ -7,7 +7,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="task-interfaces" />
         <module name="message-storage-interfaces" />
+        <module name="task-implementation" />
         <module name="common-util" />
         <module name="user-storage-implementation" />
         <module name="task-storage-implementation" />
@@ -33,6 +35,8 @@
       <module name="message-storage-implementation" target="1.8" />
       <module name="message-storage-interfaces" target="1.8" />
       <module name="rest-api-implementation" target="1.8" />
+      <module name="task-implementation" target="1.8" />
+      <module name="task-interfaces" target="1.8" />
       <module name="task-storage-implementation" target="1.8" />
       <module name="task-storage-interfaces" target="1.8" />
       <module name="user-implementation" target="1.8" />
