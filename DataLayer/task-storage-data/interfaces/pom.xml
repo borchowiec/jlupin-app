@@ -10,7 +10,7 @@
         <relativePath>./../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>user-storage-interfaces</artifactId>
+    <artifactId>task-storage-interfaces</artifactId>
 
     <properties>
         <main.dir>${project.basedir}/../../../</main.dir>
@@ -23,4 +23,5 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
 </project>

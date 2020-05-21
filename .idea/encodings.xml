@@ -9,6 +9,8 @@
     <file url="file://$PROJECT_DIR$/BusinessLogicLayer/user-business-logic/interfaces" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/DataLayer/message-storage-data/implementation" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/DataLayer/message-storage-data/interfaces" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DataLayer/task-storage-data/implementation" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DataLayer/task-storage-data/interfaces" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/DataLayer/user-storage-data/implementation" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/DataLayer/user-storage-data/interfaces" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common-pojo" charset="UTF-8" />
