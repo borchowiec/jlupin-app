@@ -4,6 +4,8 @@ import com.example.common.pojo.Task;
 import com.example.dao.interfaces.TaskRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -16,6 +18,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     private Map<Long, Task> tasks = new HashMap<>();
     private static long nextId = 0;
+    private static final Logger logger = LoggerFactory.getLogger(TaskRepositoryImpl.class);
 
     Map<Long, Task> getTasks() {
         return Collections.unmodifiableMap(tasks);
@@ -25,11 +28,13 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task save(Task task) {
         Task copy = new Task(task);
         tasks.put(copy.getId(), task);
+        logger.info(tasks.toString());
         return copy;
     }
 
     @Override
     public List<Task> getTasksByUserId(long userId) {
+        logger.info(tasks.toString());
         return tasks.values().stream()
                 .filter(task -> task.getOwner() == userId)
                 .sorted(Comparator.comparing(Task::getCreatedAt))
@@ -43,6 +48,7 @@ public class TaskRepositoryImpl implements TaskRepository {
         copy.setId(nextId);
         nextId++;
         tasks.put(copy.getId(), copy);
+        logger.info(tasks.toString());
         return copy;
     }
 

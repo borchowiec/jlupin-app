@@ -2,6 +2,7 @@ package com.example.configuration;
 
 import com.example.bean.impl.AuthenticationFilter;
 import com.example.service.interfaces.MessageService;
+import com.example.service.interfaces.TaskService;
 import com.example.service.interfaces.UserService;
 import com.jlupin.impl.client.util.JLupinClientUtil;
 import com.jlupin.interfaces.client.delegator.JLupinDelegator;
@@ -26,17 +27,22 @@ public class RestApiSpringConfiguration {
         return JLupinClientUtil.generateRemote(getJLupinDelegator(), "user", UserService.class);
     }
 
+    @Bean(name = "messageService")
+    public MessageService getMessageService() {
+        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "message", MessageService.class);
+    }
+
+    @Bean(name = "taskService")
+    public TaskService getTaskService() {
+        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "task", TaskService.class);
+    }
+
     @Bean
     public FilterRegistrationBean<AuthenticationFilter> authenticationFilter() {
         FilterRegistrationBean<AuthenticationFilter> authenticationFilter = new FilterRegistrationBean<>();
         authenticationFilter.setFilter(new AuthenticationFilter(getUserService()));
-        authenticationFilter.addUrlPatterns("/add-message", "/conversation/*");
+        authenticationFilter.addUrlPatterns("/add-message", "/conversation/*", "/task", "/tasks", "/task/*");
         return authenticationFilter;
-    }
-
-    @Bean(name = "messageService")
-    public MessageService getMessageService() {
-        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "message", MessageService.class);
     }
 }
 

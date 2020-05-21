@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Task implements Serializable {
     private long id;
-
-    @NotNull
     private long owner;
 
     @NotNull
