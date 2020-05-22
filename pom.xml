@@ -65,6 +65,8 @@
         <module>DataLayer/task-storage-data/implementation</module>
         <module>BusinessLogicLayer/task-business-logic/interfaces</module>
         <module>BusinessLogicLayer/task-business-logic/implementation</module>
+        <module>BusinessLogicLayer/notification-business-logic/interfaces</module>
+        <module>BusinessLogicLayer/notification-business-logic/implementation</module>
     </modules>
 
     <properties>

@@ -28,6 +28,7 @@
     <orderEntry type="module" module-name="message-storage-interfaces" scope="TEST" />
     <orderEntry type="module" module-name="task-storage-interfaces" scope="TEST" />
     <orderEntry type="module" module-name="task-interfaces" scope="TEST" />
+    <orderEntry type="module" module-name="notification-interfaces" scope="TEST" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.12" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.2.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.0.8.RELEASE" level="project" />

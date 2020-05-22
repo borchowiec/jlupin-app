@@ -20,6 +20,8 @@
         <option value="$PROJECT_DIR$/DataLayer/task-storage-data/implementation/pom.xml" />
         <option value="$PROJECT_DIR$/BusinessLogicLayer/task-business-logic/interfaces/pom.xml" />
         <option value="$PROJECT_DIR$/BusinessLogicLayer/task-business-logic/implementation/pom.xml" />
+        <option value="$PROJECT_DIR$/BusinessLogicLayer/notification-business-logic/interfaces/pom.xml" />
+        <option value="$PROJECT_DIR$/BusinessLogicLayer/notification-business-logic/implementation/pom.xml" />
       </list>
     </option>
   </component>

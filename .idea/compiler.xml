@@ -7,22 +7,24 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="task-interfaces" />
         <module name="message-storage-interfaces" />
         <module name="task-implementation" />
         <module name="common-util" />
         <module name="user-storage-implementation" />
+        <module name="notification-implementation" />
         <module name="task-storage-implementation" />
-        <module name="task-storage-interfaces" />
+        <module name="task-interfaces" />
         <module name="user-storage-interfaces" />
         <module name="rest-api-implementation" />
         <module name="user-interfaces" />
         <module name="integration-test" />
         <module name="message-interfaces" />
         <module name="message-storage-implementation" />
+        <module name="notification-interfaces" />
         <module name="message-implementation" />
         <module name="user-implementation" />
         <module name="common-pojo" />
+        <module name="task-storage-interfaces" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -34,6 +36,8 @@
       <module name="message-interfaces" target="1.8" />
       <module name="message-storage-implementation" target="1.8" />
       <module name="message-storage-interfaces" target="1.8" />
+      <module name="notification-implementation" target="1.8" />
+      <module name="notification-interfaces" target="1.8" />
       <module name="rest-api-implementation" target="1.8" />
       <module name="task-implementation" target="1.8" />
       <module name="task-interfaces" target="1.8" />
