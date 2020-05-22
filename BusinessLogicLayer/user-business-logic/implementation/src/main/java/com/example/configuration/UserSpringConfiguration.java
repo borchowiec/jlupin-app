@@ -7,20 +7,23 @@ import com.jlupin.interfaces.common.enums.PortType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 @ComponentScan("com.example")
 public class UserSpringConfiguration {
+
     @Bean
     public JLupinDelegator getJLupinDelegator() {
         return JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.JLRMC);
     }
 
     @Bean(name = "userStorage")
-    public UserStorage getExampleService() {
+    public UserStorage getUserStorage() {
         return JLupinClientUtil.generateRemote(getJLupinDelegator(), "user-storage", UserStorage.class);
     }
 

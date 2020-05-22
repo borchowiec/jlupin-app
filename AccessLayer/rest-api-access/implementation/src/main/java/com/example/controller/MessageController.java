@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,10 +21,9 @@ public class MessageController {
     private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     @PostMapping("/add-message")
-    public ResponseEntity<?> addMessage(@RequestBody @Valid AddMessageRequest request,
+    public boolean addMessage(@RequestBody @Valid AddMessageRequest request,
                                         @RequestHeader("Authorization") String token) {
-        HttpStatus httpStatus = messageService.addMessage(request, token);
-        return new ResponseEntity<>(httpStatus);
+        return messageService.addMessage(request, token);
     }
 
     @GetMapping("/conversation/{interlocutorId}")

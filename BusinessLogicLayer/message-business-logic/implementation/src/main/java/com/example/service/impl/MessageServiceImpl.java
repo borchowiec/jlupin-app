@@ -26,7 +26,7 @@ public class MessageServiceImpl implements MessageService {
     private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     @Override
-    public HttpStatus addMessage(AddMessageRequest request, String authenticationToken) {
+    public boolean addMessage(AddMessageRequest request, String authenticationToken) {
         long sender = userService.getUserIdFromToken(authenticationToken);
         request.setSender(sender);
         return messageStorage.addMessage(request);

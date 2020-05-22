@@ -5,6 +5,8 @@ import com.example.common.pojo.Conversation;
 import com.example.common.pojo.Message;
 import com.example.dao.interfaces.MessageRepository;
 import com.example.service.interfaces.MessageStorage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -16,15 +18,19 @@ public class MessageStorageImpl implements MessageStorage {
     @Qualifier("messageRepository")
     private MessageRepository messageRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(MessageStorageImpl.class);
+
     @Override
-    public HttpStatus addMessage(AddMessageRequest request) {
+    public boolean addMessage(AddMessageRequest request) {
+        logger.info("addMessage()");
         Message message = new Message(request);
         messageRepository.addMessage(message);
-        return HttpStatus.OK;
+        return true;
     }
 
     @Override
     public Conversation getConversation(long interlocutorA, long interlocutorB) {
+        logger.info("getConversation()");
         return messageRepository.getConversation(interlocutorA, interlocutorB);
     }
 }
