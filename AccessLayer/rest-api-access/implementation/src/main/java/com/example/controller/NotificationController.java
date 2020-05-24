@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.service.interfaces.SampleChannelWriter;
+import com.example.websocket.handler.NotificationWebSocketHandlerImpl;
 import com.jlupin.impl.client.util.channel.JLupinClientChannelIterableProducer;
 import com.jlupin.impl.client.util.channel.JLupinClientChannelUtil;
 import org.slf4j.Logger;
@@ -18,6 +19,9 @@ public class NotificationController {
     @Autowired
     private JLupinClientChannelIterableProducer jLupinClientChannelIterableProducer;
 
+    @Autowired
+    private NotificationWebSocketHandlerImpl notificationWebSocketHandler;
+
     private static final Logger logger = LoggerFactory.getLogger(NotificationController.class);
 
     @GetMapping("/list")
@@ -30,5 +34,11 @@ public class NotificationController {
             sum += (int) number;
         }
         return sum;
+    }
+
+    @GetMapping("/testNotify")
+    public void testNotify() {
+        logger.info("/testNotify");
+        notificationWebSocketHandler.sendNotification();
     }
 }

@@ -8,6 +8,7 @@ import com.example.service.interfaces.UserService;
 import com.jlupin.impl.client.delegator.balance.JLupinQueueLoadBalancerDelegatorImpl;
 import com.jlupin.impl.client.util.JLupinClientUtil;
 import com.jlupin.impl.client.util.channel.JLupinClientChannelIterableProducer;
+import com.jlupin.impl.client.util.channel.JLupinClientChannelUtil;
 import com.jlupin.impl.client.util.queue.JLupinClientQueueUtil;
 import com.jlupin.interfaces.client.delegator.JLupinDelegator;
 import com.jlupin.interfaces.common.enums.PortType;
@@ -50,6 +51,14 @@ public class RestApiSpringConfiguration {
     @Bean
     public JLupinChannelManagerService getJLupinChannelManagerService() {
         return JLupinClientUtil.generateRemote(getJLupinDelegator(), "channelMicroservice", "jLupinChannelManagerService", JLupinChannelManagerService.class);
+    }
+
+    @Bean(name="jLupinClientChannelUtil")
+    public JLupinClientChannelUtil getJLupinClientChannelUtil() {
+        JLupinChannelManagerService jLupinChannelManagerService = JLupinClientUtil.generateRemote(
+                getJLupinDelegator(), "channelMicroservice", "jLupinChannelManagerService", JLupinChannelManagerService.class);
+
+        return new JLupinClientChannelUtil("SAMPLE", jLupinChannelManagerService);
     }
 
     @Bean

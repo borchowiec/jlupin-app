@@ -1,5 +1,6 @@
 package com.example.configuration;
 
+import com.example.websocket.handler.NotificationWebSocketHandlerImpl;
 import com.example.websocket.handler.WebSocketHandlerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +14,14 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
   @Autowired
   private WebSocketHandlerImpl webSocketHandler;
 
+  @Autowired
+  private NotificationWebSocketHandlerImpl notificationWebSocketHandler;
+
   @Override
   public void registerWebSocketHandlers(final WebSocketHandlerRegistry webSocketHandlerRegistry) {
-    webSocketHandlerRegistry.addHandler(webSocketHandler, "/messages")
+    webSocketHandlerRegistry
+            .addHandler(webSocketHandler, "/messages")
+            .addHandler(notificationWebSocketHandler, "/notifications")
             .setAllowedOrigins("*");
   }
 }
