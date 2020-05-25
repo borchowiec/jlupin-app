@@ -1,4 +1,5 @@
 package com.example.common.pojo;
 
-public enum NotificaitonType {
+public enum NotificationType {
+    MESSAGE
 }

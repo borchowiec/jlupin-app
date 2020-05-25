@@ -1,6 +1,7 @@
 package com.example.configuration;
 
 import com.example.service.interfaces.MessageStorage;
+import com.example.service.interfaces.NotificationService;
 import com.example.service.interfaces.UserService;
 import com.jlupin.impl.client.util.JLupinClientUtil;
 import com.jlupin.interfaces.client.delegator.JLupinDelegator;
@@ -28,6 +29,11 @@ public class MessageSpringConfiguration {
     @Bean(name = "messageStorage")
     public MessageStorage getMessageStorage() {
         return JLupinClientUtil.generateRemote(getJLupinDelegator(), "message-storage", MessageStorage.class);
+    }
+
+    @Bean(name = "notificationService")
+    public NotificationService getNotificationService() {
+        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "notification", NotificationService.class);
     }
 
     @Bean(name = "jLupinRegularExpressionToRemotelyEnabled")

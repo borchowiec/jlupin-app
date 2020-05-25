@@ -31,7 +31,7 @@ public class NotificationSpringConfiguration {
     @Bean(name = "jLupinRegularExpressionToRemotelyEnabled")
     public List getRemotelyBeanList() {
         List<String> list = new ArrayList<>();
-        list.add("sampleChannelWriter");
+        list.add("notificationService");
         return list;
     }
 }

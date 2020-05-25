@@ -2,7 +2,7 @@ package com.example.configuration;
 
 import com.example.bean.impl.AuthenticationFilter;
 import com.example.service.interfaces.MessageService;
-import com.example.service.interfaces.SampleChannelWriter;
+import com.example.service.interfaces.NotificationService;
 import com.example.service.interfaces.TaskService;
 import com.example.service.interfaces.UserService;
 import com.jlupin.impl.client.delegator.balance.JLupinQueueLoadBalancerDelegatorImpl;
@@ -39,13 +39,6 @@ public class RestApiSpringConfiguration {
     @Bean(name = "sampleQueueClientUtil")
     public JLupinClientQueueUtil getSampleQueueClientUtil() {
         return new JLupinClientQueueUtil("MESSAGES", getJLupinQueueManagerService());
-    }
-
-
-
-    @Bean(name = "sampleChannelWriter")
-    public SampleChannelWriter getSampleChannelWriter() {
-        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "notification", SampleChannelWriter.class);
     }
 
     @Bean
