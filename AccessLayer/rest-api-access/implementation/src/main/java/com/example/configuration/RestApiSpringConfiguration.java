@@ -10,6 +10,7 @@ import com.jlupin.impl.client.util.JLupinClientUtil;
 import com.jlupin.impl.client.util.channel.JLupinClientChannelIterableProducer;
 import com.jlupin.impl.client.util.channel.JLupinClientChannelUtil;
 import com.jlupin.impl.client.util.queue.JLupinClientQueueUtil;
+import com.jlupin.impl.util.map.JLupinBlockingMap;
 import com.jlupin.interfaces.client.delegator.JLupinDelegator;
 import com.jlupin.interfaces.common.enums.PortType;
 import com.jlupin.interfaces.microservice.partofjlupin.asynchronous.service.channel.JLupinChannelManagerService;
@@ -29,6 +30,11 @@ public class RestApiSpringConfiguration {
         final JLupinDelegator jLupinDelegator = JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.QUEUE);
         ((JLupinQueueLoadBalancerDelegatorImpl) jLupinDelegator).setGetStatusAnalyseAndChooseHighestFromAllEnvironment(true);
         return jLupinDelegator;
+    }
+
+    @Bean(name = "blockingMap")
+    public JLupinBlockingMap getJLupinBlockingMap() {
+        return new JLupinBlockingMap();
     }
 
     @Bean

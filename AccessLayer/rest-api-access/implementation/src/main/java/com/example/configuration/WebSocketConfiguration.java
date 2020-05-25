@@ -12,15 +12,11 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class WebSocketConfiguration implements WebSocketConfigurer {
   @Autowired
-  private WebSocketHandlerImpl webSocketHandler;
-
-  @Autowired
   private NotificationWebSocketHandlerImpl notificationWebSocketHandler;
 
   @Override
   public void registerWebSocketHandlers(final WebSocketHandlerRegistry webSocketHandlerRegistry) {
     webSocketHandlerRegistry
-            .addHandler(webSocketHandler, "/messages")
             .addHandler(notificationWebSocketHandler, "/notifications")
             .setAllowedOrigins("*");
   }
