@@ -42,8 +42,8 @@ public class RestApiSpringConfiguration {
         return JLupinClientUtil.generateRemote(getQueueJLupinDelegator(), "queueMicroservice", "jLupinQueueManagerService", JLupinQueueManagerService.class);
     }
 
-    @Bean(name = "sampleQueueClientUtil")
-    public JLupinClientQueueUtil getSampleQueueClientUtil() {
+    @Bean(name = "messagesQueueClientUtil")
+    public JLupinClientQueueUtil getMessagesQueueClientUtil() {
         return new JLupinClientQueueUtil("MESSAGES", getJLupinQueueManagerService());
     }
 

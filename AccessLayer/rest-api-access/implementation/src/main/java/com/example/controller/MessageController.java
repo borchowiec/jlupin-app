@@ -23,8 +23,8 @@ public class MessageController {
     private MessageService messageService;
 
     @Autowired
-    @Qualifier("sampleQueueClientUtil")
-    private JLupinClientQueueUtil sampleQueueClientUtil;
+    @Qualifier("messagesQueueClientUtil")
+    private JLupinClientQueueUtil messagesQueueClientUtil;
 
     @Autowired
     private JLupinBlockingMap blockingMap;
@@ -34,7 +34,7 @@ public class MessageController {
     @PostMapping("/add-message")
     public boolean addMessage(@RequestBody @Valid AddMessageRequest request,
                                         @RequestHeader("Authorization") String token) throws JLupinClientQueueUtilException {
-        final String taskId = sampleQueueClientUtil.putTaskInput(
+        final String taskId = messagesQueueClientUtil.putTaskInput(
                 "message",
                 "messageService",
                 "addMessage",
@@ -42,7 +42,7 @@ public class MessageController {
         );
 
         blockingMap.ensureBlockingContainer(taskId);
-        sampleQueueClientUtil.registerFunctionOnTaskResult(
+        messagesQueueClientUtil.registerFunctionOnTaskResult(
             taskId,
             new JLupinQueueReactiveFunction() {
                 @Override
