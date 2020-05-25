@@ -39,7 +39,7 @@ public class MessageServiceImpl implements MessageService {
         request.setSender(sender);
         boolean isSaved = messageStorage.addMessage(request);
         if (isSaved) {
-            Notification notification = new Notification(request.getReceiver(), MESSAGE, request.getContent());
+            Notification notification = new Notification(request.getReceiver(), sender, MESSAGE, request.getContent());
             notificationService.sendNotification(notification);
         }
         return isSaved;

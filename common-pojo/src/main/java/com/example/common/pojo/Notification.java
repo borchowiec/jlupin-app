@@ -11,6 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Notification implements Serializable {
     private long receiver;
+    private long sender;
     private NotificationType type;
     private String content;
 }

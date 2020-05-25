@@ -66,6 +66,11 @@ public class RestApiSpringConfiguration {
         return JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.JLRMC);
     }
 
+    @Bean(name = "notificationService")
+    public NotificationService getNotificationService() {
+        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "notification", NotificationService.class);
+    }
+
     @Bean(name = "userService")
     public UserService getUserService() {
         return JLupinClientUtil.generateRemote(getJLupinDelegator(), "user", UserService.class);
