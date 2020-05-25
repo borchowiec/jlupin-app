@@ -39,4 +39,23 @@ public class NotificationServiceImpl implements NotificationService {
     public void addChannel(long userId, String sessionId, String channelId) {
         channelContexts.add(new ChannelContext(channelId, userId, sessionId));
     }
+
+    @Override
+    public void closeChannel(String sessionId) {
+        // get channel context by sessionId
+        ChannelContext context = channelContexts.stream()
+                .filter(ctx -> ctx.getSessionId().equals(sessionId))
+                .findAny()
+                .orElse(null);
+
+        // close channel and remove channel context
+        if (context != null) {
+            try {
+                jLupinClientChannelUtil.closeStreamChannel(context.getChannelId());
+            } catch (JLupinClientChannelUtilException e) {
+                logger.error("Cannot close channel of id {}", context.getChannelId());
+            }
+            channelContexts.remove(context);
+        }
+    }
 }
