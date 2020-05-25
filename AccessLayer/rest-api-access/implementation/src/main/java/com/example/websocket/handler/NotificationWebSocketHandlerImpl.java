@@ -1,17 +1,19 @@
 package com.example.websocket.handler;
 
+import com.example.common.util.StringUtils;
+import com.example.service.interfaces.NotificationService;
+import com.example.service.interfaces.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jlupin.impl.client.util.channel.JLupinClientChannelIterableProducer;
 import com.jlupin.impl.client.util.channel.JLupinClientChannelUtil;
-import com.jlupin.impl.client.util.channel.exception.JLupinClientChannelUtilException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,30 +26,42 @@ public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
     @Autowired
     private JLupinClientChannelIterableProducer jLupinClientChannelIterableProducer;
 
-    private Map<String, WebSocketSession> sessions = new HashMap<>();
+    @Autowired
+    @Qualifier("notificationService")
+    private NotificationService notificationService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    @Qualifier("userService")
+    private UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationWebSocketHandlerImpl.class);
-    private String temp_channel_id;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        temp_channel_id = jLupinClientChannelUtil.openStreamChannel();
-        sessions.put(session.getId(), session);
-        logger.info("afterConnection {}", session.getId());
-        logger.info("channelId " + temp_channel_id);
+        String stringCookies = session.getHandshakeHeaders().toSingleValueMap().get("cookie");
+        String token = StringUtils.getValueFromCookies(stringCookies, "Authorization");
 
-        Iterable iterable = jLupinClientChannelIterableProducer.produceChannelIterable("SAMPLE", temp_channel_id);
+        if (token != null) {
+            long userId = userService.getUserIdFromToken(token);
+            String chanelId = jLupinClientChannelUtil.openStreamChannel();
 
-        for (Object notification : iterable) {
-            logger.info("[NOTIFICATION] " + notification);
+            notificationService.addChannel(userId, session.getId(), chanelId);
+            Iterable iterable = jLupinClientChannelIterableProducer.produceChannelIterable("SAMPLE", chanelId);
+
+            for (Object notification : iterable) {
+                session.sendMessage(new TextMessage(objectMapper.writeValueAsString(notification)));
+            }
+        }
+        else {
+            session.close();
         }
     }
 
-    public void sendNotification() {
-        try {
-            jLupinClientChannelUtil.putNextElementToStreamChannel(temp_channel_id, "teeest");
-        } catch (JLupinClientChannelUtilException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        notificationService.closeChannel(session.getId());
     }
 }

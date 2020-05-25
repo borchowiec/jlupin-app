@@ -5,21 +5,14 @@
 </head>
 <h2>Notifications</h2>
 
-<input type="text" id="input"/>
-<button onclick="doSend()">Send</button>
 <div id="output"></div>
-
-</div>
 
 <script language="javascript" type="text/javascript">
     var wsUri = "ws://localhost:8000/rest-api/notifications";
-    var input;
     var output;
-    var userId;
 
     function init()
     {
-        input = document.getElementById("input");
         output = document.getElementById("output");
         testWebSocket();
     }
@@ -45,18 +38,12 @@
 
     function onMessage(evt)
     {
-        writeToScreen('<span style="color: blue;">SENT:</span> ' + evt.data);
+        writeToScreen('<span style="color: blue;">NOTIFICATION:</span> ' + evt.data);
     }
 
     function onError(evt)
     {
         writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
-    }
-
-    function doSend() {
-        writeToScreen("MESSAGE: " + input.value);
-        websocket.send(JSON.stringify({receiver: userId, content: input.value}));
-        input.value = "";
     }
 
     function writeToScreen(message)

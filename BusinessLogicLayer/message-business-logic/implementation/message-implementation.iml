@@ -14,6 +14,7 @@
     <orderEntry type="module" module-name="message-interfaces" />
     <orderEntry type="module" module-name="user-interfaces" />
     <orderEntry type="module" module-name="message-storage-interfaces" />
+    <orderEntry type="module" module-name="notification-interfaces" />
     <orderEntry type="library" name="Maven: com.jlupin:jlupin-platform-native:1.6.1.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.8" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.8" level="project" />

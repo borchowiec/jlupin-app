@@ -73,8 +73,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public long getUserIdFromToken(String token) {
-        long id = tokenProvider.getId(token);
-        logger.info(String.valueOf(id));
-        return id;
+        return tokenProvider.getId(token);
     }
 }

@@ -2,7 +2,7 @@ package com.example.configuration;
 
 import com.example.bean.impl.AuthenticationFilter;
 import com.example.service.interfaces.MessageService;
-import com.example.service.interfaces.SampleChannelWriter;
+import com.example.service.interfaces.NotificationService;
 import com.example.service.interfaces.TaskService;
 import com.example.service.interfaces.UserService;
 import com.jlupin.impl.client.delegator.balance.JLupinQueueLoadBalancerDelegatorImpl;
@@ -41,13 +41,6 @@ public class RestApiSpringConfiguration {
         return new JLupinClientQueueUtil("MESSAGES", getJLupinQueueManagerService());
     }
 
-
-
-    @Bean(name = "sampleChannelWriter")
-    public SampleChannelWriter getSampleChannelWriter() {
-        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "notification", SampleChannelWriter.class);
-    }
-
     @Bean
     public JLupinChannelManagerService getJLupinChannelManagerService() {
         return JLupinClientUtil.generateRemote(getJLupinDelegator(), "channelMicroservice", "jLupinChannelManagerService", JLupinChannelManagerService.class);
@@ -71,6 +64,11 @@ public class RestApiSpringConfiguration {
     @Bean
     public JLupinDelegator getJLupinDelegator() {
         return JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.JLRMC);
+    }
+
+    @Bean(name = "notificationService")
+    public NotificationService getNotificationService() {
+        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "notification", NotificationService.class);
     }
 
     @Bean(name = "userService")
