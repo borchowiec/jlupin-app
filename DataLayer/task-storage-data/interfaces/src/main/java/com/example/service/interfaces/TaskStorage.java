@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface TaskStorage {
     Task save(Task task);
-    List<Task> getUserTasks(long userId);
-    Task getTaskById(long task);
+    List<Task> getUserTasks(String userId);
+    Task getTaskById(String task);
     Task insert(Task task);
-    boolean delete(long task);
+    boolean delete(String task);
 }
