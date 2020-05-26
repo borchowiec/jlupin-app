@@ -35,7 +35,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public boolean addMessage(AddMessageRequest request, String authenticationToken) {
-        long sender = userService.getUserIdFromToken(authenticationToken);
+        String sender = userService.getUserIdFromToken(authenticationToken);
         request.setSender(sender);
         boolean isSaved = messageStorage.addMessage(request);
         if (isSaved) {
@@ -46,8 +46,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Conversation getConversation(long interlocutorA, String authenticationToken) {
-        long interlocutorB = userService.getUserIdFromToken(authenticationToken);
+    public Conversation getConversation(String interlocutorA, String authenticationToken) {
+        String interlocutorB = userService.getUserIdFromToken(authenticationToken);
         return messageStorage.getConversation(interlocutorA, interlocutorB);
     }
 }

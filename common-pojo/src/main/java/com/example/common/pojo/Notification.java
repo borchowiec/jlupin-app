@@ -10,8 +10,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notification implements Serializable {
-    private long receiver;
-    private long sender;
+    private String receiver;
+    private String sender;
     private NotificationType type;
     private String content;
 }
