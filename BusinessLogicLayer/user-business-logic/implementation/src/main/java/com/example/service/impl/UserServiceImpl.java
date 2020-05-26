@@ -1,9 +1,6 @@
 package com.example.service.impl;
 
-import com.example.common.pojo.AddUserRequest;
-import com.example.common.pojo.AuthenticateUserRequest;
-import com.example.common.pojo.AuthenticateUserResponse;
-import com.example.common.pojo.User;
+import com.example.common.pojo.*;
 import com.example.common.util.JwtTokenProvider;
 import com.example.service.interfaces.UserService;
 import com.example.service.interfaces.UserStorage;
@@ -64,5 +61,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isTokenValid(String token) {
         return tokenProvider.isValid(token);
+    }
+
+    @Override
+    public UserInfo getUserInfo(String token) {
+        String id = tokenProvider.getId(token);
+        User user = userStorage.getUser(id);
+        return new UserInfo(user);
     }
 }
