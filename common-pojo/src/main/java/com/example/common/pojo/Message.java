@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Message implements Serializable {
-    private long id;
-    private long sender;
-    private long receiver;
+    private String id;
+    private String sender;
+    private String receiver;
     private LocalDateTime sendTime;
     private String content;
 

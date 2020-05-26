@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 
 @Data
 public class AddMessageRequest implements Serializable {
-    private long sender;
+    private String sender;
     private LocalDateTime sendTime = LocalDateTime.now();
 
     @NotNull
-    private long receiver;
+    private String receiver;
 
     @NotNull
     private String content;

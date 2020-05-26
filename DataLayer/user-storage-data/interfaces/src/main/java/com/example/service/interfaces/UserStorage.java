@@ -9,5 +9,5 @@ public interface UserStorage {
     boolean addUser(AddUserRequest addUserRequest);
     boolean existsByUsername(String username);
     User findByUsername(String username);
-    List<User> findByIds(long... ids);
+    List<User> findByIds(String... ids);
 }
