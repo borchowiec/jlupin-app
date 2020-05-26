@@ -34,7 +34,6 @@ public class MessageRepositoryImpl implements MessageRepository {
         String id = UUID.randomUUID().toString();
         copy.setId(id);
         messages.put(copy.getId(), copy);
-        logger.info(messages.toString()); // todo
         return copy;
     }
 

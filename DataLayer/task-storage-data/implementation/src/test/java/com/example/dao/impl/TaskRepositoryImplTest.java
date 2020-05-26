@@ -19,8 +19,8 @@ class TaskRepositoryImplTest {
     @Test
     void save_repositoryDoesntContainGivenTask_shouldAddItToRepository() {
         // given
-        Map<Long, Task> tasks = getExampleTaskMap();
-        Task task = new Task(10L, 2L, "Message",
+        Map<String, Task> tasks = getExampleTaskMap();
+        Task task = new Task("10L", "2L", "Message",
                 LocalDateTime.of(2020, 2, 13, 10, 13, 43), TODO);
         assertFalse(tasks.containsKey(task.getId()));
 
@@ -29,7 +29,7 @@ class TaskRepositoryImplTest {
         Task actual = taskRepository.save(task);
 
         // then
-        Task expected = new Task(10L, 2L, "Message",
+        Task expected = new Task("10L", "2L", "Message",
                 LocalDateTime.of(2020, 2, 13, 10, 13, 43), TODO);
 
         assertEquals(expected, actual);
@@ -40,8 +40,8 @@ class TaskRepositoryImplTest {
     @Test
     void save_repositoryContainsGivenTask_shouldUpdateTask() {
         // given
-        Map<Long, Task> tasks = getExampleTaskMap();
-        Task task = new Task(2L, 10L, "mm",
+        Map<String, Task> tasks = getExampleTaskMap();
+        Task task = new Task("2L", "10L", "mm",
                 LocalDateTime.of(2020, 2, 13, 10, 13, 43), DONE);
         assertTrue(tasks.containsKey(task.getId()));
 
@@ -50,7 +50,7 @@ class TaskRepositoryImplTest {
         Task actual = taskRepository.save(task);
 
         // then
-        Task expected = new Task(2L, 10L, "mm",
+        Task expected = new Task("2L", "10L", "mm",
                 LocalDateTime.of(2020, 2, 13, 10, 13, 43), DONE);
 
         assertEquals(expected, actual);
@@ -61,17 +61,17 @@ class TaskRepositoryImplTest {
     @Test
     void getTasksByUserId_thereIsManyUnorderedTasks_shouldReturnUserTasksOrderedByCreatedAtTime() {
         // given
-        long userId = 5L;
-        Map<Long, Task> tasks = Stream.of(
-                new Task(0L, 2L, "Message",
+        String userId = "5L";
+        Map<String, Task> tasks = Stream.of(
+                new Task("0L", "2L", "Message",
                         LocalDateTime.of(2020, 2, 13, 10, 13, 43), TODO),
-                new Task(1L, 5L, "Message",
+                new Task("1L", "5L", "Message",
                         LocalDateTime.of(2020, 2, 16, 13, 13, 43), DONE),
-                new Task(2L, 3L, "Message",
+                new Task("2L", "3L", "Message",
                         LocalDateTime.of(2020, 2, 1, 12, 13, 43), TODO),
-                new Task(3L, 5L, "Message",
+                new Task("3L", "5L", "Message",
                         LocalDateTime.of(2018, 12, 15, 1, 13, 43), DONE),
-                new Task(4L, 5L, "Message",
+                new Task("4L", "5L", "Message",
                         LocalDateTime.of(2020, 1, 17, 12, 13, 43), TODO)
         ).map(task -> new Pair<>(task.getId(), task))
         .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
@@ -81,7 +81,7 @@ class TaskRepositoryImplTest {
         List<Task> actual = taskRepository.getTasksByUserId(userId);
 
         // then
-        List<Task> expected = Stream.of(tasks.get(3L), tasks.get(4L), tasks.get(1L)).collect(Collectors.toList());
+        List<Task> expected = Stream.of(tasks.get("3L"), tasks.get("4L"), tasks.get("1L")).collect(Collectors.toList());
         assertEquals(expected, actual);
     }
 
@@ -89,8 +89,8 @@ class TaskRepositoryImplTest {
     void insert_twoTasksInARow_shouldHaveDifferentIds() {
         // given
         LocalDateTime time = LocalDateTime.now();
-        Task task1 = new Task(-1L, 1L, "Some task message", time, TODO);
-        Task task2 = new Task(-1L, 2L, "Some other task message", time, TODO);
+        Task task1 = new Task(null, "1L", "Some task message", time, TODO);
+        Task task2 = new Task(null, "2L", "Some other task message", time, TODO);
 
         // when
         TaskRepositoryImpl taskRepository = new TaskRepositoryImpl();
@@ -98,12 +98,7 @@ class TaskRepositoryImplTest {
         Task actual2 = taskRepository.put(task2);
 
         // then
-        Task expected1 = new Task(0, 1L, "Some task message", time, TODO);
-        Task expected2 = new Task(1L, 2L, "Some other task message", time, TODO);
-
-        assertEquals(expected1, actual1);
-        assertEquals(expected2, actual2);
-
+        assertNotEquals(actual1.getId(), actual2.getId());
         assertNotSame(task1, actual1);
         assertNotSame(task2, actual2);
     }
@@ -111,8 +106,8 @@ class TaskRepositoryImplTest {
     @Test
     void delete_taskDoesntExist_shouldReturnFalse() {
         // given
-        long taskId = 10L;
-        Map<Long, Task> tasks = getExampleTaskMap();
+        String taskId = "10L";
+        Map<String , Task> tasks = getExampleTaskMap();
         assertFalse(tasks.containsKey(taskId));
 
         // when
@@ -128,8 +123,8 @@ class TaskRepositoryImplTest {
     @Test
     void delete_taskExists_shouldReturnTrue() {
         // given
-        long taskId = 2L;
-        Map<Long, Task> tasks = getExampleTaskMap();
+        String  taskId = "2L";
+        Map<String, Task> tasks = getExampleTaskMap();
         assertTrue(tasks.containsKey(taskId));
 
         // when
@@ -141,17 +136,17 @@ class TaskRepositoryImplTest {
         assertFalse(taskRepository.getTasks().containsKey(taskId));
     }
 
-    private Map<Long, Task> getExampleTaskMap() {
+    private Map<String, Task> getExampleTaskMap() {
         return Stream.of(
-                new Task(0L, 2L, "Message",
+                new Task("0L", "2L", "Message",
                         LocalDateTime.of(2020, 2, 13, 10, 13, 43), TODO),
-                new Task(1L, 5L, "Todo",
+                new Task("1L", "5L", "Todo",
                         LocalDateTime.of(2020, 2, 16, 13, 13, 43), DONE),
-                new Task(2L, 3L, "Some other message",
+                new Task("2L", "3L", "Some other message",
                         LocalDateTime.of(2020, 2, 1, 12, 13, 43), TODO),
-                new Task(3L, 5L, "Message",
+                new Task("3L", "5L", "Message",
                         LocalDateTime.of(2018, 12, 15, 1, 13, 43), DONE),
-                new Task(4L, 4L, "msg",
+                new Task("4L", "4L", "msg",
                         LocalDateTime.of(2020, 1, 17, 12, 13, 43), TODO)
         ).map(task -> new Pair<>(task.getId(), task))
         .collect(Collectors.toMap(Pair::getKey, Pair::getValue));

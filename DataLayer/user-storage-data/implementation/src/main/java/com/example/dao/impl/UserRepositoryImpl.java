@@ -35,8 +35,6 @@ public class UserRepositoryImpl implements UserRepository {
         String id = UUID.randomUUID().toString();
         copy.setId(id);
         users.put(copy.getId(), copy);
-
-        logger.info(user.toString()); // todo
         return copy;
     }
 

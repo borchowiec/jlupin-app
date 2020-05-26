@@ -27,7 +27,6 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task save(Task task) {
         Task copy = new Task(task);
         tasks.put(copy.getId(), task);
-        logger.info(tasks.toString()); // todo
         return copy;
     }
 

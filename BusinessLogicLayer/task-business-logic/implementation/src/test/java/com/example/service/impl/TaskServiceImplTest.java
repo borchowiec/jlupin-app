@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static com.example.common.pojo.TaskStatus.DONE;
 import static com.example.common.pojo.TaskStatus.TODO;
@@ -28,12 +29,13 @@ class TaskServiceImplTest {
     @Test
     void insert_properData_shouldReturnAddedTask() {
         // given
-        Task task = new Task(0L, 0L, "Message", LocalDateTime.now(), null);
-        long principalId = 20L;
+        Task task = new Task(null, null, "Message", LocalDateTime.now(), null);
+        String principalId = UUID.randomUUID().toString();
 
         // when
+        String taskId = UUID.randomUUID().toString();
         when(taskStorage.insert(any(Task.class))).thenAnswer(args -> {
-            ((Task) args.getArgument(0)).setId(30L);
+            ((Task) args.getArgument(0)).setId(taskId);
             return args.getArgument(0);
         });
         when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
@@ -41,20 +43,22 @@ class TaskServiceImplTest {
         Task actual = taskService.insert(task, "Bearer token");
 
         // then
-        Task expected = new Task(30L, principalId, task.getMessage(), task.getCreatedAt(), TODO);
+        Task expected = new Task(taskId, principalId, task.getMessage(), task.getCreatedAt(), TODO);
         assertEquals(expected, actual);
     }
 
     @Test
     void save_taskDoesntExist_shouldReturnInsertedTask() {
         // given
-        Task task = new Task(10L, 0L, "Message", LocalDateTime.now(), DONE);
-        long principalId = 20L;
+        String taskId = UUID.randomUUID().toString();
+        String principalId = UUID.randomUUID().toString();
+        Task task = new Task(taskId, null, "Message", LocalDateTime.now(), DONE);
 
         // when
-        when(taskStorage.getTaskById(anyLong())).thenReturn(null);
+        String finalTaskId = UUID.randomUUID().toString();
+        when(taskStorage.getTaskById(anyString())).thenReturn(null);
         when(taskStorage.insert(any(Task.class))).thenAnswer(args -> {
-            ((Task) args.getArgument(0)).setId(30L);
+            ((Task) args.getArgument(0)).setId(finalTaskId);
             return args.getArgument(0);
         });
         when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
@@ -62,19 +66,20 @@ class TaskServiceImplTest {
         Task actual = taskService.save(task, "Bearer token");
 
         // then
-        Task expected = new Task(30L, principalId, task.getMessage(), task.getCreatedAt(), task.getStatus());
+        Task expected = new Task(finalTaskId, principalId, task.getMessage(), task.getCreatedAt(), task.getStatus());
         assertEquals(expected, actual);
     }
 
     @Test
     void save_taskExistsAndPrincipalIsAOwner_shouldReturnUpdatedTask() {
         // given
-        long principalId = 20L;
-        Task task = new Task(10L, 0L, "Message", LocalDateTime.now(), DONE);
-        Task taskInStorage = new Task(10L, principalId, "no message", LocalDateTime.now().minusDays(12), TODO);
+        String taskId = UUID.randomUUID().toString();
+        String principalId = UUID.randomUUID().toString();
+        Task task = new Task(taskId, null, "Message", LocalDateTime.now(), DONE);
+        Task taskInStorage = new Task(taskId, principalId, "no message", LocalDateTime.now().minusDays(12), TODO);
 
         // when
-        when(taskStorage.getTaskById(anyLong())).thenReturn(taskInStorage);
+        when(taskStorage.getTaskById(anyString())).thenReturn(taskInStorage);
         when(taskStorage.save(any(Task.class))).thenAnswer(args -> args.getArgument(0));
         when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
         TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
@@ -89,12 +94,13 @@ class TaskServiceImplTest {
     @Test
     void save_taskExistsButPrincipalIsNotAOwner_shouldReturnNull() {
         // given
-        long principalId = 20L;
-        Task task = new Task(10L, 0L, "Message", LocalDateTime.now(), DONE);
-        Task taskInStorage = new Task(10L, principalId + 1L, "no message", LocalDateTime.now().minusDays(12), TODO);
+        String taskId = UUID.randomUUID().toString();
+        String principalId = UUID.randomUUID().toString();
+        Task task = new Task(taskId, null, "Message", LocalDateTime.now(), DONE);
+        Task taskInStorage = new Task(taskId, principalId + "char", "no message", LocalDateTime.now().minusDays(12), TODO);
 
         // when
-        when(taskStorage.getTaskById(anyLong())).thenReturn(taskInStorage);
+        when(taskStorage.getTaskById(anyString())).thenReturn(taskInStorage);
         when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
         TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
         Task actual = taskService.save(task, "Bearer token");
@@ -106,8 +112,8 @@ class TaskServiceImplTest {
     @Test
     void delete_taskDoesntExist_shouldReturnFalse() {
         // given
-        long principalId = 20L;
-        long taskId = 100L;
+        String taskId = UUID.randomUUID().toString();
+        String principalId = UUID.randomUUID().toString();
 
         // when
         when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
@@ -122,14 +128,14 @@ class TaskServiceImplTest {
     @Test
     void delete_taskExistsAndPrincipalIsAOwnerOfTask_shouldReturnTrue() {
         // given
-        long principalId = 20L;
-        long taskId = 100L;
+        String taskId = UUID.randomUUID().toString();
+        String principalId = UUID.randomUUID().toString();
         Task taskInStorage = new Task(taskId, principalId, "Some message", LocalDateTime.now(), DONE);
 
         // when
         when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
-        when(taskStorage.getTaskById(anyLong())).thenReturn(taskInStorage);
-        when(taskStorage.delete(anyLong())).thenReturn(true);
+        when(taskStorage.getTaskById(anyString())).thenReturn(taskInStorage);
+        when(taskStorage.delete(anyString())).thenReturn(true);
         TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
         boolean actual = taskService.delete(taskId, "Bearer token");
 
@@ -140,13 +146,13 @@ class TaskServiceImplTest {
     @Test
     void delete_taskExistsButPrincipalIsNotAOwnerOfTask_shouldReturnFalse() {
         // given
-        long principalId = 20L;
-        long taskId = 100L;
+        String taskId = UUID.randomUUID().toString();
+        String principalId = UUID.randomUUID().toString();
         Task taskInStorage = new Task(taskId, principalId + 1, "Some message", LocalDateTime.now(), DONE);
 
         // when
         when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
-        when(taskStorage.getTaskById(anyLong())).thenReturn(taskInStorage);
+        when(taskStorage.getTaskById(anyString())).thenReturn(taskInStorage);
         TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
         boolean actual = taskService.delete(taskId, "Bearer token");
 
@@ -157,13 +163,14 @@ class TaskServiceImplTest {
     @Test
     void getTasks_properData_shouldReturnUserTasks() {
         // given
-        long principalId = 20L;
+        String taskId = UUID.randomUUID().toString();
+        String principalId = UUID.randomUUID().toString();
         List<Task> tasks = Collections.singletonList(
-                new Task(10L, principalId, "Some message", LocalDateTime.now(), DONE));
+                new Task(taskId, principalId, "Some message", LocalDateTime.now(), DONE));
 
         // when
         when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
-        when(taskStorage.getUserTasks(anyLong())).thenReturn(tasks);
+        when(taskStorage.getUserTasks(anyString())).thenReturn(tasks);
         TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
         List<Task> actual = taskService.getTasks("Bearer token");
 
