@@ -9,6 +9,10 @@ body {
     margin: 0 auto;
 }
 
+.errorMessage {
+    color: crimson;
+}
+
 .navbar {
     text-align: center;
     width: 100%;

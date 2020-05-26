@@ -26,6 +26,5 @@ async function getUserInfo() {
         .catch((error) => {
             console.error('Error:', error);
         });
-    console.log(userInfo);
     return userInfo;
 }
