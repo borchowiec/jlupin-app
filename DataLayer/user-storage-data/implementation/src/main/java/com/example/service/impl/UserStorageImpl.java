@@ -40,9 +40,9 @@ public class UserStorageImpl implements UserStorage {
     }
 
     @Override
-    public List<User> findByIds(long... ids) {
+    public List<User> findByIds(String... ids) {
         List<User> users = new LinkedList();
-        for (long id : ids) {
+        for (String id : ids) {
             users.add(userRepository.findById(id));
         }
         return users;

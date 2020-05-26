@@ -12,29 +12,31 @@ import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository(value = "userRepository")
 public class UserRepositoryImpl implements UserRepository {
 
-    private Map<Long, User> users = new HashMap<>();
-    private static long nextId = 0L;
+    private Map<String, User> users = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
     @PostConstruct
     public void addExampleUsers() {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        put(new User(0, "admin", passwordEncoder.encode("password")));
-        put(new User(0, "username123", passwordEncoder.encode("password")));
-        put(new User(0, "userr", passwordEncoder.encode("password")));
-        put(new User(0, "admin3", passwordEncoder.encode("password")));
+        put(new User(UUID.randomUUID().toString(), "admin", passwordEncoder.encode("password")));
+        put(new User(UUID.randomUUID().toString(), "username123", passwordEncoder.encode("password")));
+        put(new User(UUID.randomUUID().toString(), "userr", passwordEncoder.encode("password")));
+        put(new User(UUID.randomUUID().toString(), "admin3", passwordEncoder.encode("password")));
     }
 
     @Override
     public User put(User user) {
         User copy = new User(user);
-        copy.setId(nextId);
-        nextId++;
+        String id = UUID.randomUUID().toString();
+        copy.setId(id);
         users.put(copy.getId(), copy);
+
+        logger.info(user.toString()); // todo
         return copy;
     }
 
@@ -51,7 +53,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findById(long id) {
+    public User findById(String id) {
         return users.get(id);
     }
 }
