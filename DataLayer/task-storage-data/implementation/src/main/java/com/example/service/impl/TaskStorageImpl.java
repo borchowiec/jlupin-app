@@ -22,12 +22,12 @@ public class TaskStorageImpl implements TaskStorage {
     }
 
     @Override
-    public List<Task> getUserTasks(long userId) {
+    public List<Task> getUserTasks(String userId) {
         return taskRepository.getTasksByUserId(userId);
     }
 
     @Override
-    public Task getTaskById(long task) {
+    public Task getTaskById(String task) {
         return taskRepository.getTaskById(task);
     }
 
@@ -37,7 +37,7 @@ public class TaskStorageImpl implements TaskStorage {
     }
 
     @Override
-    public boolean delete(long task) {
+    public boolean delete(String task) {
         return taskRepository.delete(task);
     }
 }

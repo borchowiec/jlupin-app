@@ -31,7 +31,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/task/{taskId}")
-    public boolean removeTask(@PathVariable long taskId, @RequestHeader("Authorization") String token) {
+    public boolean removeTask(@PathVariable String taskId, @RequestHeader("Authorization") String token) {
         return taskService.delete(taskId, token);
     }
 }

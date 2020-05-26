@@ -58,7 +58,7 @@ public class JwtTokenProviderImpl implements TokenProvider {
         // generate token
         Algorithm algorithm = Algorithm.HMAC256(SECRET);
         return JWT.create()
-                .withSubject(String.valueOf(user.getId()))
+                .withSubject(user.getId())
                 .withIssuedAt(now)
                 .withExpiresAt(expiryDate)
                 .sign(algorithm);
@@ -85,11 +85,11 @@ public class JwtTokenProviderImpl implements TokenProvider {
     }
 
     @Override
-    public long getId(String token) {
+    public String getId(String token) {
         // remove 'Bearer '
         token = token.substring(7);
 
         DecodedJWT jwt = JWT.decode(token);
-        return Long.parseLong(jwt.getSubject());
+        return jwt.getSubject();
     }
 }

@@ -5,5 +5,5 @@ import com.example.common.pojo.Message;
 
 public interface MessageRepository {
     Message addMessage(Message message);
-    Conversation getConversation(long interlocutorA, long interlocutorB);
+    Conversation getConversation(String interlocutorA, String interlocutorB);
 }

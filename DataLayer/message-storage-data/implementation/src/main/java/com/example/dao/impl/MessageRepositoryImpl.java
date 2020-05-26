@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
@@ -27,33 +24,32 @@ public class MessageRepositoryImpl implements MessageRepository {
     @Autowired
     @Qualifier("userStorage")
     private UserStorage userStorage;
-    private Map<Long, Message> messages = new HashMap<>();
+    private Map<String, Message> messages = new HashMap<>();
 
-    private static long nextId = 0L;
     private static final Logger logger = LoggerFactory.getLogger(MessageRepositoryImpl.class);
 
     @Override
     public Message addMessage(Message message) {
         Message copy = new Message(message);
-        copy.setId(nextId);
-        nextId++;
+        String id = UUID.randomUUID().toString();
+        copy.setId(id);
         messages.put(copy.getId(), copy);
         return copy;
     }
 
     @Override
-    public Conversation getConversation(long interlocutorA, long interlocutorB) {
+    public Conversation getConversation(String interlocutorA, String  interlocutorB) {
         Conversation conversation = new Conversation();
 
-        Map<Long, String> interlocutors = userStorage
+        Map<String, String> interlocutors = userStorage
                 .findByIds(interlocutorA, interlocutorB)
                 .stream()
                 .collect(Collectors.toMap(User::getId, User::getUsername));
 
         List<Message> conversationMessages = messages.values()
                 .stream()
-                .filter(message -> (message.getSender() == interlocutorA && message.getReceiver() == interlocutorB)
-                        || (message.getSender() == interlocutorB && message.getReceiver() == interlocutorA))
+                .filter(message -> (message.getSender().equals(interlocutorA) && message.getReceiver().equals(interlocutorB))
+                        || (message.getSender().equals(interlocutorB) && message.getReceiver().equals(interlocutorA)))
                 .sorted(Comparator.comparing(Message::getSendTime))
                 .collect(Collectors.toList());
 

@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ChannelContext {
     private String channelId;
-    private long userId;
+    private String userId;
     private String sessionId;
 }

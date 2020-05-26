@@ -25,7 +25,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void sendNotification(Notification notification) {
         channelContexts.stream()
-                .filter(context -> context.getUserId() == notification.getReceiver()) // send only to receivers
+                .filter(context -> context.getUserId().equals(notification.getReceiver())) // send only to receivers
                 .forEach(context -> {
                     try {
                         jLupinClientChannelUtil.putNextElementToStreamChannel(context.getChannelId(), notification);
@@ -36,7 +36,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void addChannel(long userId, String sessionId, String channelId) {
+    public void addChannel(String userId, String sessionId, String channelId) {
         channelContexts.add(new ChannelContext(channelId, userId, sessionId));
     }
 

@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
 
         // encode password
         addUserRequest.setPassword(passwordEncoder.encode(addUserRequest.getPassword()));
-
         return userStorage.addUser(addUserRequest);
     }
 
@@ -72,7 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public long getUserIdFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         return tokenProvider.getId(token);
     }
 }

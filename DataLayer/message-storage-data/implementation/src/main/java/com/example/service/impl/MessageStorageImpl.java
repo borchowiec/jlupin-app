@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service(value = "messageStorage")
@@ -22,15 +21,13 @@ public class MessageStorageImpl implements MessageStorage {
 
     @Override
     public boolean addMessage(AddMessageRequest request) {
-        logger.info("addMessage()");
         Message message = new Message(request);
         messageRepository.addMessage(message);
         return true;
     }
 
     @Override
-    public Conversation getConversation(long interlocutorA, long interlocutorB) {
-        logger.info("getConversation()");
+    public Conversation getConversation(String interlocutorA, String interlocutorB) {
         return messageRepository.getConversation(interlocutorA, interlocutorB);
     }
 }

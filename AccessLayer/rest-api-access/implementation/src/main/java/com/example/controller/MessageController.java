@@ -61,7 +61,7 @@ public class MessageController {
     }
 
     @GetMapping("/conversation/{interlocutorId}")
-    public Conversation getConversation(@PathVariable long interlocutorId,
+    public Conversation getConversation(@PathVariable String interlocutorId,
                                         @RequestHeader("Authorization") String token) {
         return messageService.getConversation(interlocutorId, token);
     }

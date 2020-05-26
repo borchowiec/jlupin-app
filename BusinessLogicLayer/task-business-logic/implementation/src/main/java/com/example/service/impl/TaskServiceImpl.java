@@ -29,7 +29,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task insert(Task task, String authenticationToken) {
-        long userId = userService.getUserIdFromToken(authenticationToken);
+        String userId = userService.getUserIdFromToken(authenticationToken);
         task.setOwner(userId);
         task.setStatus(TODO);
         return taskStorage.insert(task);
@@ -37,7 +37,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task save(Task task, String authenticationToken) {
-        long userId = userService.getUserIdFromToken(authenticationToken);
+        String userId = userService.getUserIdFromToken(authenticationToken);
         task.setOwner(userId);
         Task taskInStorage = taskStorage.getTaskById(task.getId());
 
@@ -47,7 +47,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
         // update if principal is a owner of given task
-        if (userId == taskInStorage.getOwner()) {
+        if (userId.equals(taskInStorage.getOwner())) {
             return taskStorage.save(task);
         }
 
@@ -55,8 +55,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public boolean delete(long task, String authenticationToken) {
-        long userId = userService.getUserIdFromToken(authenticationToken);
+    public boolean delete(String task, String authenticationToken) {
+        String userId = userService.getUserIdFromToken(authenticationToken);
         Task taskInStorage = taskStorage.getTaskById(task);
 
         // task of given id doesn't exists
@@ -65,7 +65,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
         // if principal is a owner of task
-        if (taskInStorage.getOwner() == userId) {
+        if (taskInStorage.getOwner().equals(userId)) {
             return taskStorage.delete(task);
         }
 
@@ -74,7 +74,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasks(String authenticationToken) {
-        long userId = userService.getUserIdFromToken(authenticationToken);
+        String userId = userService.getUserIdFromToken(authenticationToken);
         return taskStorage.getUserTasks(userId);
     }
 }

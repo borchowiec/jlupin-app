@@ -5,5 +5,5 @@ import com.example.common.pojo.Conversation;
 
 public interface MessageService {
     boolean addMessage(AddMessageRequest request, String authenticationToken);
-    Conversation getConversation(long interlocutor, String authenticationToken);
+    Conversation getConversation(String interlocutor, String authenticationToken);
 }
