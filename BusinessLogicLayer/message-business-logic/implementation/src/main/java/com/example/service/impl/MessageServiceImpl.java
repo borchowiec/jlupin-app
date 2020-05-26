@@ -1,18 +1,16 @@
 package com.example.service.impl;
 
-import com.example.common.pojo.AddMessageRequest;
-import com.example.common.pojo.Conversation;
-import com.example.common.pojo.Notification;
-import com.example.common.pojo.NotificationType;
-import com.example.service.interfaces.MessageService;
-import com.example.service.interfaces.MessageStorage;
-import com.example.service.interfaces.NotificationService;
-import com.example.service.interfaces.UserService;
+import com.example.common.pojo.*;
+import com.example.service.interfaces.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.example.common.pojo.NotificationType.MESSAGE;
 
@@ -22,6 +20,10 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     @Qualifier("userService")
     private UserService userService;
+
+    @Autowired
+    @Qualifier("userStorage")
+    private UserStorage userStorage;
 
     @Autowired
     @Qualifier("messageStorage")
@@ -47,7 +49,20 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Conversation getConversation(String interlocutorA, String authenticationToken) {
+        Conversation conversation = new Conversation();
         String interlocutorB = userService.getUserIdFromToken(authenticationToken);
-        return messageStorage.getConversation(interlocutorA, interlocutorB);
+
+        // get messages between two users
+        List<Message> messages = messageStorage.getConversation(interlocutorA, interlocutorB);
+        conversation.setMessages(messages);
+
+        // get usernames
+        Map<String, String> interlocutors = userStorage
+                .findByIds(interlocutorA, interlocutorB)
+                .stream()
+                .collect(Collectors.toMap(User::getId, User::getUsername));
+        conversation.setInterlocutors(interlocutors);
+
+        return conversation;
     }
 }
