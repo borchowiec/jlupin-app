@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import com.example.common.pojo.Task;
+import com.example.common.util.JwtTokenProvider;
 import com.example.service.interfaces.TaskStorage;
 import com.example.service.interfaces.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,12 +19,12 @@ import static org.mockito.Mockito.*;
 
 class TaskServiceImplTest {
     private TaskStorage taskStorage;
-    private UserService userService;
+    private JwtTokenProvider tokenProvider;
 
     @BeforeEach
     void setup() {
         taskStorage = mock(TaskStorage.class);
-        userService = mock(UserService.class);
+        tokenProvider = mock(JwtTokenProvider.class);
     }
 
     @Test
@@ -38,8 +39,8 @@ class TaskServiceImplTest {
             ((Task) args.getArgument(0)).setId(taskId);
             return args.getArgument(0);
         });
-        when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
-        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
+        when(tokenProvider.getId(anyString())).thenReturn(principalId);
+        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, tokenProvider);
         Task actual = taskService.insert(task, "Bearer token");
 
         // then
@@ -61,8 +62,8 @@ class TaskServiceImplTest {
             ((Task) args.getArgument(0)).setId(finalTaskId);
             return args.getArgument(0);
         });
-        when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
-        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
+        when(tokenProvider.getId(anyString())).thenReturn(principalId);
+        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, tokenProvider);
         Task actual = taskService.save(task, "Bearer token");
 
         // then
@@ -81,8 +82,8 @@ class TaskServiceImplTest {
         // when
         when(taskStorage.getTaskById(anyString())).thenReturn(taskInStorage);
         when(taskStorage.save(any(Task.class))).thenAnswer(args -> args.getArgument(0));
-        when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
-        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
+        when(tokenProvider.getId(anyString())).thenReturn(principalId);
+        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, tokenProvider);
         Task actual = taskService.save(task, "Bearer token");
 
         // then
@@ -101,8 +102,8 @@ class TaskServiceImplTest {
 
         // when
         when(taskStorage.getTaskById(anyString())).thenReturn(taskInStorage);
-        when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
-        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
+        when(tokenProvider.getId(anyString())).thenReturn(principalId);
+        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, tokenProvider);
         Task actual = taskService.save(task, "Bearer token");
 
         // then
@@ -116,9 +117,9 @@ class TaskServiceImplTest {
         String principalId = UUID.randomUUID().toString();
 
         // when
-        when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
+        when(tokenProvider.getId(anyString())).thenReturn(principalId);
         when(taskStorage.getTaskById(taskId)).thenReturn(null);
-        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
+        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, tokenProvider);
         boolean actual = taskService.delete(taskId, "Bearer token");
 
         // then
@@ -133,10 +134,10 @@ class TaskServiceImplTest {
         Task taskInStorage = new Task(taskId, principalId, "Some message", LocalDateTime.now(), DONE);
 
         // when
-        when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
+        when(tokenProvider.getId(anyString())).thenReturn(principalId);
         when(taskStorage.getTaskById(anyString())).thenReturn(taskInStorage);
         when(taskStorage.delete(anyString())).thenReturn(true);
-        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
+        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, tokenProvider);
         boolean actual = taskService.delete(taskId, "Bearer token");
 
         // then
@@ -151,9 +152,9 @@ class TaskServiceImplTest {
         Task taskInStorage = new Task(taskId, principalId + 1, "Some message", LocalDateTime.now(), DONE);
 
         // when
-        when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
+        when(tokenProvider.getId(anyString())).thenReturn(principalId);
         when(taskStorage.getTaskById(anyString())).thenReturn(taskInStorage);
-        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
+        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, tokenProvider);
         boolean actual = taskService.delete(taskId, "Bearer token");
 
         // then
@@ -169,9 +170,9 @@ class TaskServiceImplTest {
                 new Task(taskId, principalId, "Some message", LocalDateTime.now(), DONE));
 
         // when
-        when(userService.getUserIdFromToken(anyString())).thenReturn(principalId);
+        when(tokenProvider.getId(anyString())).thenReturn(principalId);
         when(taskStorage.getUserTasks(anyString())).thenReturn(tasks);
-        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, userService);
+        TaskServiceImpl taskService = new TaskServiceImpl(taskStorage, tokenProvider);
         List<Task> actual = taskService.getTasks("Bearer token");
 
         // then

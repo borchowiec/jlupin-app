@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import com.example.common.pojo.*;
+import com.example.common.util.JwtTokenProvider;
 import com.example.service.interfaces.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +19,6 @@ import static com.example.common.pojo.NotificationType.MESSAGE;
 public class MessageServiceImpl implements MessageService {
 
     @Autowired
-    @Qualifier("userService")
-    private UserService userService;
-
-    @Autowired
     @Qualifier("userStorage")
     private UserStorage userStorage;
 
@@ -33,11 +30,13 @@ public class MessageServiceImpl implements MessageService {
     @Qualifier("notificationService")
     private NotificationService notificationService;
 
+    private JwtTokenProvider tokenProvider = JwtTokenProvider.getInstance();
+
     private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     @Override
     public boolean addMessage(AddMessageRequest request, String authenticationToken) {
-        String sender = userService.getUserIdFromToken(authenticationToken);
+        String sender = tokenProvider.getId(authenticationToken);
         request.setSender(sender);
         boolean isSaved = messageStorage.addMessage(request);
         if (isSaved) {
@@ -50,7 +49,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Conversation getConversation(String interlocutorA, String authenticationToken) {
         Conversation conversation = new Conversation();
-        String interlocutorB = userService.getUserIdFromToken(authenticationToken);
+        String interlocutorB = tokenProvider.getId(authenticationToken);
 
         // get messages between two users
         List<Message> messages = messageStorage.getConversation(interlocutorA, interlocutorB);

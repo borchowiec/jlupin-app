@@ -23,8 +23,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /*@Autowired
-    @Qualifier("tokenProvider")*/
     private JwtTokenProvider tokenProvider = JwtTokenProvider.getInstance();
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -66,10 +64,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isTokenValid(String token) {
         return tokenProvider.isValid(token);
-    }
-
-    @Override
-    public String getUserIdFromToken(String token) {
-        return tokenProvider.getId(token);
     }
 }

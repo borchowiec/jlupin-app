@@ -8,5 +8,4 @@ public interface UserService {
     boolean addUser(AddUserRequest addUserRequest);
     AuthenticateUserResponse getAuthenticationToken(AuthenticateUserRequest authenticateUserRequest);
     boolean isTokenValid(String token);
-    String getUserIdFromToken(String token);
 }
