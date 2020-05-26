@@ -44,7 +44,7 @@ public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
         String token = StringUtils.getValueFromCookies(stringCookies, "Authorization");
 
         if (token != null) {
-            long userId = userService.getUserIdFromToken(token);
+            String userId = userService.getUserIdFromToken(token);
             String chanelId = jLupinClientChannelUtil.openStreamChannel();
 
             notificationService.addChannel(userId, session.getId(), chanelId);
