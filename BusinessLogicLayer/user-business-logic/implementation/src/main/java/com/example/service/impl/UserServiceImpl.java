@@ -1,10 +1,10 @@
 package com.example.service.impl;
 
-import com.example.bean.interfaces.TokenProvider;
 import com.example.common.pojo.AddUserRequest;
 import com.example.common.pojo.AuthenticateUserRequest;
 import com.example.common.pojo.AuthenticateUserResponse;
 import com.example.common.pojo.User;
+import com.example.common.util.JwtTokenProvider;
 import com.example.service.interfaces.UserService;
 import com.example.service.interfaces.UserStorage;
 import org.slf4j.Logger;
@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserService {
@@ -25,9 +23,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    @Qualifier("tokenProvider")
-    private TokenProvider tokenProvider;
+    private JwtTokenProvider tokenProvider = JwtTokenProvider.getInstance();
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -68,10 +64,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isTokenValid(String token) {
         return tokenProvider.isValid(token);
-    }
-
-    @Override
-    public String getUserIdFromToken(String token) {
-        return tokenProvider.getId(token);
     }
 }

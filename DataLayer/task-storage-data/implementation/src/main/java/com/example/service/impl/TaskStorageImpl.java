@@ -33,7 +33,7 @@ public class TaskStorageImpl implements TaskStorage {
 
     @Override
     public Task insert(Task task) {
-        return taskRepository.put(task);
+        return taskRepository.insert(task);
     }
 
     @Override

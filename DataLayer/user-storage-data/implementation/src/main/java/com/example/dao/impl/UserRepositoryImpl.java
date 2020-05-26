@@ -23,18 +23,19 @@ public class UserRepositoryImpl implements UserRepository {
     @PostConstruct
     public void addExampleUsers() {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        put(new User(UUID.randomUUID().toString(), "admin", passwordEncoder.encode("password")));
-        put(new User(UUID.randomUUID().toString(), "username123", passwordEncoder.encode("password")));
-        put(new User(UUID.randomUUID().toString(), "userr", passwordEncoder.encode("password")));
-        put(new User(UUID.randomUUID().toString(), "admin3", passwordEncoder.encode("password")));
+        insert(new User(UUID.randomUUID().toString(), "admin", passwordEncoder.encode("password")));
+        insert(new User(UUID.randomUUID().toString(), "username123", passwordEncoder.encode("password")));
+        insert(new User(UUID.randomUUID().toString(), "userr", passwordEncoder.encode("password")));
+        insert(new User(UUID.randomUUID().toString(), "admin3", passwordEncoder.encode("password")));
     }
 
     @Override
-    public User put(User user) {
+    public User insert(User user) {
         User copy = new User(user);
         String id = UUID.randomUUID().toString();
         copy.setId(id);
         users.put(copy.getId(), copy);
+        logger.info(users.toString());
         return copy;
     }
 

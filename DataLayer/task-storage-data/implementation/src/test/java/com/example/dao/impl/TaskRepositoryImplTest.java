@@ -94,8 +94,8 @@ class TaskRepositoryImplTest {
 
         // when
         TaskRepositoryImpl taskRepository = new TaskRepositoryImpl();
-        Task actual1 = taskRepository.put(task1);
-        Task actual2 = taskRepository.put(task2);
+        Task actual1 = taskRepository.insert(task1);
+        Task actual2 = taskRepository.insert(task2);
 
         // then
         assertNotEquals(actual1.getId(), actual2.getId());

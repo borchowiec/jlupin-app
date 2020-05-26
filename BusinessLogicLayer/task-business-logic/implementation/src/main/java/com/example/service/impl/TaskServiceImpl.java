@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import com.example.common.pojo.Task;
+import com.example.common.util.JwtTokenProvider;
 import com.example.service.interfaces.TaskService;
 import com.example.service.interfaces.TaskStorage;
 import com.example.service.interfaces.UserService;
@@ -23,13 +24,11 @@ public class TaskServiceImpl implements TaskService {
     @Qualifier("taskStorage")
     private TaskStorage taskStorage;
 
-    @Autowired
-    @Qualifier("userService")
-    private UserService userService;
+    private JwtTokenProvider tokenProvider = JwtTokenProvider.getInstance();
 
     @Override
     public Task insert(Task task, String authenticationToken) {
-        String userId = userService.getUserIdFromToken(authenticationToken);
+        String userId = tokenProvider.getId(authenticationToken);
         task.setOwner(userId);
         task.setStatus(TODO);
         return taskStorage.insert(task);
@@ -37,7 +36,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task save(Task task, String authenticationToken) {
-        String userId = userService.getUserIdFromToken(authenticationToken);
+        String userId = tokenProvider.getId(authenticationToken);
         task.setOwner(userId);
         Task taskInStorage = taskStorage.getTaskById(task.getId());
 
@@ -56,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public boolean delete(String task, String authenticationToken) {
-        String userId = userService.getUserIdFromToken(authenticationToken);
+        String userId = tokenProvider.getId(authenticationToken);
         Task taskInStorage = taskStorage.getTaskById(task);
 
         // task of given id doesn't exists
@@ -74,7 +73,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasks(String authenticationToken) {
-        String userId = userService.getUserIdFromToken(authenticationToken);
+        String userId = tokenProvider.getId(authenticationToken);
         return taskStorage.getUserTasks(userId);
     }
 }

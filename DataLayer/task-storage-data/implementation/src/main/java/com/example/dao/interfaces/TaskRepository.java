@@ -7,7 +7,7 @@ import java.util.List;
 public interface TaskRepository {
     Task save(Task task);
     List<Task> getTasksByUserId(String userId);
-    Task put(Task task);
+    Task insert(Task task);
     boolean delete(String task);
     Task getTaskById(String task);
 }
