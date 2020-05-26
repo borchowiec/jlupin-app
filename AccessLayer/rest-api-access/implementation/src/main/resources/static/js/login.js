@@ -21,7 +21,6 @@ $(document).ready(function() {
                     Cookies.set("Authorization", `${data.type} ${data.token}`);
                     window.open("/rest-api/", "_self");
                 }
-                console.log(data);
             })
             .catch((error) => {
                 $(".errorMessage").text(error.message);
