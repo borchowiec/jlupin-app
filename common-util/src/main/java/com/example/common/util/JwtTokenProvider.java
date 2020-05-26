@@ -1,55 +1,45 @@
-package com.example.bean.impl;
+package com.example.common.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.bean.interfaces.TokenProvider;
 import com.example.common.pojo.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Properties;
 
-@Component(value = "tokenProvider")
-public class JwtTokenProviderImpl implements TokenProvider {
-
-    private static final Logger logger = LoggerFactory.getLogger(JwtTokenProviderImpl.class);
+public class JwtTokenProvider {
     private final String SECRET;
     private final int EXPIRATION_TIME;
+    private static JwtTokenProvider tokenProvider;
 
-    public JwtTokenProviderImpl() {
-        // load file with properties
-        File root = new File(System.getProperty("user.dir"));
-        String propertiesFilePath = root.getAbsolutePath() + File.separator + "application.properties";
-        InputStream inputStream;
-        try {
-            inputStream = Files.newInputStream(Paths.get(propertiesFilePath));
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot find " + propertiesFilePath + " file.");
+    public static JwtTokenProvider getInstance() {
+        if (tokenProvider == null) {
+            tokenProvider = new JwtTokenProvider();
         }
-
-        // load properties
-        Properties properties = new Properties();
-        try {
-            properties.load(inputStream);
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot load properties from file " + propertiesFilePath + ".");
-        }
-
-        // get properties
-        SECRET = properties.getProperty("secret");
-        EXPIRATION_TIME = Integer.parseInt(properties.getProperty("expirationInMs"));
+        return tokenProvider;
     }
 
-    @Override
+    private JwtTokenProvider() {
+        ClassPathResource resource = new ClassPathResource("token.properties");
+        Properties p = new Properties();
+        InputStream inputStream;
+        try {
+            inputStream = resource.getInputStream();
+            p.load(inputStream);
+            inputStream.close();
+        } catch ( IOException e ) {
+            throw new IllegalStateException(e.getMessage());
+        }
+
+        SECRET = p.getProperty("secret");
+        EXPIRATION_TIME = Integer.parseInt(p.getProperty("expirationInMs"));
+    }
+
     public String generateToken(User user) {
         // setting expiration time
         Date now = new Date();
@@ -64,7 +54,6 @@ public class JwtTokenProviderImpl implements TokenProvider {
                 .sign(algorithm);
     }
 
-    @Override
     public boolean isValid(String token) {
         if (!token.startsWith("Bearer ")) {
             return false;
@@ -84,7 +73,6 @@ public class JwtTokenProviderImpl implements TokenProvider {
         }
     }
 
-    @Override
     public String getId(String token) {
         // remove 'Bearer '
         token = token.substring(7);
