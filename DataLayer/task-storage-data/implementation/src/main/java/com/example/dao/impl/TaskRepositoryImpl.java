@@ -41,7 +41,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public Task put(Task task) {
+    public Task insert(Task task) {
         Task copy = new Task(task);
         String id = UUID.randomUUID().toString();
         copy.setId(id);

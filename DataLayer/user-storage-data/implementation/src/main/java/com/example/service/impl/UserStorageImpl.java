@@ -23,7 +23,7 @@ public class UserStorageImpl implements UserStorage {
         user.setPassword(addUserRequest.getPassword());
         user.setUsername(addUserRequest.getUsername());
 
-        User put = userRepository.put(user);
+        User put = userRepository.insert(user);
         return put != null;
     }
 

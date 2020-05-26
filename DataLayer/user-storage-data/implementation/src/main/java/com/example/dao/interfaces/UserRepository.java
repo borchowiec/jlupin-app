@@ -5,7 +5,7 @@ import com.example.common.pojo.User;
 import java.util.Optional;
 
 public interface UserRepository {
-    User put(User user);
+    User insert(User user);
 
     boolean existsByUsername(String username);
 
