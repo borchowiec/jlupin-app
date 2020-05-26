@@ -2,7 +2,9 @@ package com.example.controller;
 
 import com.example.common.pojo.AddMessageRequest;
 import com.example.common.pojo.Conversation;
+import com.example.common.pojo.Notification;
 import com.example.service.interfaces.MessageService;
+import com.example.service.interfaces.NotificationService;
 import com.jlupin.impl.client.util.queue.JLupinClientQueueUtil;
 import com.jlupin.impl.client.util.queue.exception.JLupinClientQueueUtilException;
 import com.jlupin.impl.util.map.JLupinBlockingMap;
@@ -15,8 +17,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.example.common.pojo.NotificationType.MESSAGE;
+
 @RestController
 public class MessageController {
+
+    @Autowired
+    @Qualifier("notificationService")
+    private NotificationService notificationService;
 
     @Autowired
     @Qualifier("messageService")
@@ -57,7 +65,12 @@ public class MessageController {
             }
         );
 
-        return (boolean) blockingMap.get(taskId);
+        boolean success = (boolean) blockingMap.get(taskId);
+        if (success) {
+            Notification notification = new Notification(request.getReceiver(), null, MESSAGE, request.getContent());
+            notificationService.sendNotification(notification);
+        }
+        return success;
     }
 
     @GetMapping("/conversation/{interlocutorId}")

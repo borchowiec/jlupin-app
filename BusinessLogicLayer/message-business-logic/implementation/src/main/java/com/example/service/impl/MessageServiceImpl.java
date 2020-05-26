@@ -26,10 +26,6 @@ public class MessageServiceImpl implements MessageService {
     @Qualifier("messageStorage")
     private MessageStorage messageStorage;
 
-    @Autowired
-    @Qualifier("notificationService")
-    private NotificationService notificationService;
-
     private JwtTokenProvider tokenProvider = JwtTokenProvider.getInstance();
 
     private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
@@ -38,12 +34,7 @@ public class MessageServiceImpl implements MessageService {
     public boolean addMessage(AddMessageRequest request, String authenticationToken) {
         String sender = tokenProvider.getId(authenticationToken);
         request.setSender(sender);
-        boolean isSaved = messageStorage.addMessage(request);
-        if (isSaved) {
-            Notification notification = new Notification(request.getReceiver(), sender, MESSAGE, request.getContent());
-            notificationService.sendNotification(notification);
-        }
-        return isSaved;
+        return messageStorage.addMessage(request);
     }
 
     @Override

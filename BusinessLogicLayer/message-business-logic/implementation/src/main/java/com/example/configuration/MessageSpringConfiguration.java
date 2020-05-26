@@ -32,11 +32,6 @@ public class MessageSpringConfiguration {
         return JLupinClientUtil.generateRemote(getJLupinDelegator(), "message-storage", MessageStorage.class);
     }
 
-    @Bean(name = "notificationService")
-    public NotificationService getNotificationService() {
-        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "notification", NotificationService.class);
-    }
-
     @Bean(name = "jLupinRegularExpressionToRemotelyEnabled")
     public List getRemotelyBeanList() {
         List<String> list = new ArrayList<>();

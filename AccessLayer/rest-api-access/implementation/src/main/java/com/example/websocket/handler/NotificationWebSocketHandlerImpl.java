@@ -1,8 +1,8 @@
 package com.example.websocket.handler;
 
+import com.example.common.util.JwtTokenProvider;
 import com.example.common.util.StringUtils;
 import com.example.service.interfaces.NotificationService;
-import com.example.service.interfaces.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jlupin.impl.client.util.channel.JLupinClientChannelIterableProducer;
 import com.jlupin.impl.client.util.channel.JLupinClientChannelUtil;
@@ -32,9 +32,7 @@ public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    @Qualifier("userService")
-    private UserService userService;
+    private JwtTokenProvider tokenProvider = JwtTokenProvider.getInstance();
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationWebSocketHandlerImpl.class);
 
@@ -44,7 +42,7 @@ public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
         String token = StringUtils.getValueFromCookies(stringCookies, "Authorization");
 
         if (token != null) {
-            String userId = userService.getUserIdFromToken(token);
+            String userId = tokenProvider.getId(token);
             String chanelId = jLupinClientChannelUtil.openStreamChannel();
 
             notificationService.addChannel(userId, session.getId(), chanelId);
