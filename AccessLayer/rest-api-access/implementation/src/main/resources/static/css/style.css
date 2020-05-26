@@ -1,0 +1,19 @@
+body {
+    background-color: #bfcece;
+}
+
+.container {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.notification-box {
+    width: 200px;
+    height: 200px;
+    position: fixed;
+    z-index: 100;
+    bottom: 0;
+    right: 0;
+    background-color: #6cdc99;
+    border-radius: 5px;
+}
