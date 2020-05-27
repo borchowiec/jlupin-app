@@ -50,9 +50,19 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Conversation getConversation(String interlocutorA, String authenticationToken) {
+    public Response<?> getConversation(String interlocutorA, String authenticationToken) {
         Conversation conversation = new Conversation();
         String interlocutorB = tokenProvider.getId(authenticationToken);
+
+        if (!userStorage.existsById(interlocutorB)) {
+            String msg = String.format("Not found user of id %s. Try to log out and log in.", interlocutorB);
+            return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
+        }
+
+        if (!userStorage.existsById(interlocutorA)) {
+            String msg = String.format("Not found user of id %s.", interlocutorA);
+            return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
+        }
 
         // get messages between two users
         List<Message> messages = messageStorage.getConversation(interlocutorA, interlocutorB);
@@ -65,7 +75,7 @@ public class MessageServiceImpl implements MessageService {
                 .collect(Collectors.toMap(User::getId, User::getUsername));
         conversation.setInterlocutors(interlocutors);
 
-        return conversation;
+        return new Response<>(conversation, HttpStatus.OK);
     }
 
     @Override

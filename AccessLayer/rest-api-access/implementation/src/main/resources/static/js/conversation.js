@@ -28,9 +28,14 @@ function init() {
                 'Authorization': authCookie
             }
         })
-            .then(response => response.json())
+            .then(response => response.json().then(data => ({status: response.status, body: data})))
             .then(data => {
-                initConversation(data);
+                if (data.status === 200) {
+                    initConversation(data.body);
+                }
+                else {
+                    writeToScreen(data.body.message);
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);
