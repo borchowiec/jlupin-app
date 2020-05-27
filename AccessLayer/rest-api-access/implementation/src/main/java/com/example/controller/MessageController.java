@@ -1,6 +1,9 @@
 package com.example.controller;
 
-import com.example.common.pojo.*;
+import com.example.common.pojo.AddMessageRequest;
+import com.example.common.pojo.Notification;
+import com.example.common.pojo.Response;
+import com.example.common.util.JwtTokenProvider;
 import com.example.service.interfaces.MessageService;
 import com.example.service.interfaces.NotificationService;
 import com.jlupin.impl.client.util.queue.JLupinClientQueueUtil;
@@ -16,8 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
-import java.util.List;
 
 import static com.example.common.pojo.NotificationType.MESSAGE;
 
@@ -38,6 +39,8 @@ public class MessageController {
 
     @Autowired
     private JLupinBlockingMap blockingMap;
+
+    private JwtTokenProvider tokenProvider = JwtTokenProvider.getInstance();
 
     private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
@@ -69,7 +72,9 @@ public class MessageController {
 
         Response response = (Response) blockingMap.get(taskId);
         if (response.getStatus() == HttpStatus.OK) {
-            Notification notification = new Notification(request.getReceiver(), null, MESSAGE, request.getContent());
+            String principalId = tokenProvider.getId(token);
+            Notification notification = new Notification(request.getReceiver(), principalId,
+                    MESSAGE, request.getContent());
             notificationService.sendNotification(notification);
         }
         return new ResponseEntity<>(response.getPayload(), response.getStatus());

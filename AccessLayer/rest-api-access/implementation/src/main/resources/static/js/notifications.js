@@ -25,7 +25,12 @@ function onMessage(evt) {
     const box = $(".notification-box");
 
     box.empty();
-    box.append(`<p><b>New message!</b></p><p>${data.content}</p>`);
+    if (data.type === "MESSAGE") {
+        box.append(`<a href="conversation.html?userId=${data.sender}"><p style="font-size: 20px"><b>New message!</b></p><p style="font-size: 16px">${data.content}</p></a>`);
+    }
+    else {
+        box.append(`<p>${data.content}</p>`);
+    }
     box.show();
 
     setTimeout(() => box.hide(), 3000)
