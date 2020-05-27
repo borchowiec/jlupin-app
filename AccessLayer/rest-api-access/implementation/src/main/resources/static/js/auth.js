@@ -19,9 +19,14 @@ async function getUserInfo() {
             'Authorization': authCookie
         }
     })
-        .then(response => response.json())
+        .then(response => response.json().then(data => ({status: response.status, body: data})))
         .then(data => {
-            userInfo = data;
+            if (data.status === 200) {
+                userInfo = data.body;
+            }
+            else {
+                alert(data.body.message);
+            }
         })
         .catch((error) => {
             console.error('Error:', error);

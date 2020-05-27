@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,49 +28,52 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
-    public boolean addUser(AddUserRequest addUserRequest) {
+    public Response<?> addUser(AddUserRequest addUserRequest) {
         // check if user already exists
         String username = addUserRequest.getUsername();
         boolean alreadyExists = userStorage.existsByUsername(username);
         if (alreadyExists) {
-            String message = "User of username: " + username + " already exists.";
-            return false;
+            return new Response<>(new ErrorMessage(String.format("User of username: %s already exists.", username)),
+                    HttpStatus.BAD_REQUEST);
         }
 
         // encode password
         addUserRequest.setPassword(passwordEncoder.encode(addUserRequest.getPassword()));
-        return userStorage.addUser(addUserRequest);
+        userStorage.addUser(addUserRequest);
+        return new Response<>(true, HttpStatus.OK);
     }
 
     @Override
-    public AuthenticateUserResponse getAuthenticationToken(AuthenticateUserRequest request) {
+    public Response<?> getAuthenticationToken(AuthenticateUserRequest request) {
         // get user
         String username = request.getUsername();
         User user = userStorage.findByUsername(username);
+        if (user == null) {
+            return new Response<>(new ErrorMessage("Wrong credentials."), HttpStatus.FORBIDDEN);
+        }
 
         // check password
         boolean validPassword = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!validPassword) {
-            throw new RuntimeException("Wrong credentials");
+            return new Response<>(new ErrorMessage("Wrong credentials."), HttpStatus.FORBIDDEN);
         }
 
         // generate token
         AuthenticateUserResponse response = new AuthenticateUserResponse();
         String token = tokenProvider.generateToken(user);
         response.setToken(token);
-        return response;
+        return new Response<>(response, HttpStatus.OK);
     }
 
     @Override
-    public boolean isTokenValid(String token) {
-        return tokenProvider.isValid(token);
-    }
-
-    @Override
-    public UserInfo getUserInfo(String token) {
+    public Response<?> getUserInfo(String token) {
         String id = tokenProvider.getId(token);
+        if (!userStorage.existsById(id)) {
+            String msg = String.format("Not found user of id %s. Try to log out and log in.", id);
+            return new Response<>(new ErrorMessage(msg), HttpStatus.FORBIDDEN);
+        }
         User user = userStorage.getUser(id);
-        return new UserInfo(user);
+        return new Response<>(new UserInfo(user), HttpStatus.OK);
     }
 
     @Override

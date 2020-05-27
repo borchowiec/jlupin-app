@@ -47,7 +47,7 @@ public class UserStorageImpl implements UserStorage {
     public User findByUsername(String username) {
         return userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Wrong credentials"));
+                .orElse(null);
     }
 
     @Override

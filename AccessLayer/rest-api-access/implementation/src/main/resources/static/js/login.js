@@ -12,14 +12,14 @@ $(document).ready(function() {
             },
             body: JSON.stringify({username: username, password: password})
         })
-            .then(response => response.json())
+            .then(response => response.json().then(data => ({status: response.status, body: data})))
             .then(data => {
-                if (data.status === 500) {
-                    $(".errorMessage").text(data.message);
+                if (data.status === 200) {
+                    Cookies.set("Authorization", `${data.body.type} ${data.body.token}`);
+                    window.open("/rest-api/", "_self");
                 }
                 else {
-                    Cookies.set("Authorization", `${data.type} ${data.token}`);
-                    window.open("/rest-api/", "_self");
+                    $(".errorMessage").text(data.body.message);
                 }
             })
             .catch((error) => {
