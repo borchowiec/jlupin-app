@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,16 +32,37 @@ public class MessageServiceImpl implements MessageService {
     private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     @Override
-    public boolean addMessage(AddMessageRequest request, String authenticationToken) {
+    public Response<?> addMessage(AddMessageRequest request, String authenticationToken) {
         String sender = tokenProvider.getId(authenticationToken);
+
+        if (!userStorage.existsById(sender)) {
+            String msg = String.format("Not found user of id %s. Try to log out and log in.", request.getReceiver());
+            return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
+        }
         request.setSender(sender);
-        return messageStorage.addMessage(request);
+
+        if (!userStorage.existsById(request.getReceiver())) {
+            String msg = String.format("Not found user of id %s.", request.getReceiver());
+            return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
+        }
+
+        return new Response<>(messageStorage.addMessage(request), HttpStatus.OK);
     }
 
     @Override
-    public Conversation getConversation(String interlocutorA, String authenticationToken) {
+    public Response<?> getConversation(String interlocutorA, String authenticationToken) {
         Conversation conversation = new Conversation();
         String interlocutorB = tokenProvider.getId(authenticationToken);
+
+        if (!userStorage.existsById(interlocutorB)) {
+            String msg = String.format("Not found user of id %s. Try to log out and log in.", interlocutorB);
+            return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
+        }
+
+        if (!userStorage.existsById(interlocutorA)) {
+            String msg = String.format("Not found user of id %s.", interlocutorA);
+            return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
+        }
 
         // get messages between two users
         List<Message> messages = messageStorage.getConversation(interlocutorA, interlocutorB);
@@ -53,17 +75,24 @@ public class MessageServiceImpl implements MessageService {
                 .collect(Collectors.toMap(User::getId, User::getUsername));
         conversation.setInterlocutors(interlocutors);
 
-        return conversation;
+        return new Response<>(conversation, HttpStatus.OK);
     }
 
     @Override
-    public List<UserInfo> getInterlocutors(String token) {
+    public Response<?> getInterlocutors(String token) {
         String userId = tokenProvider.getId(token);
         List<String> interlocutorsIds = messageStorage.getInterlocutors(userId);
-        return userStorage
+
+        if (!userStorage.existsById(userId)) {
+            String msg = String.format("Not found user of id %s. Try to log out and log in.", userId);
+            return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
+        }
+
+        List<UserInfo> collect = userStorage
                 .findByIds(interlocutorsIds.toArray(new String[interlocutorsIds.size()]))
                 .stream()
                 .map(UserInfo::new)
                 .collect(Collectors.toList());
+        return new Response<>(collect, HttpStatus.OK);
     }
 }

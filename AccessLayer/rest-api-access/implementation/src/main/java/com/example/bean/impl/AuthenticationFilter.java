@@ -1,6 +1,7 @@
 package com.example.bean.impl;
 
 import com.example.bean.exception.UnauthorizedException;
+import com.example.common.util.JwtTokenProvider;
 import com.example.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +19,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
 
-    private UserService userService;
-
-    public AuthenticationFilter(UserService userService) {
-        this.userService = userService;
-    }
+    private JwtTokenProvider tokenProvider = JwtTokenProvider.getInstance();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -31,7 +28,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (!hasText(token)) {
             throw new UnauthorizedException("Not found authorization token");
         }
-        if (!userService.isTokenValid(token)) {
+        if (!tokenProvider.isValid(token)) {
             throw new UnauthorizedException("Authorization token is not valid");
         }
 

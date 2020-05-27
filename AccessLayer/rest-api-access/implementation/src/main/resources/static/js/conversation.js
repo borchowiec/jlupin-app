@@ -28,9 +28,14 @@ function init() {
                 'Authorization': authCookie
             }
         })
-            .then(response => response.json())
+            .then(response => response.json().then(data => ({status: response.status, body: data})))
             .then(data => {
-                initConversation(data);
+                if (data.status === 200) {
+                    initConversation(data.body);
+                }
+                else {
+                    writeToScreen(data.body.message);
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -38,12 +43,14 @@ function init() {
     }
 }
 
+function addMessage(message) {
+    writeToScreen(`<div class="message"><b>${interlocutors[message.sender]}</b></br>${message.content}</div>`);
+}
+
 function initConversation(data) {
     interlocutors = data.interlocutors;
 
-    data.messages.forEach(message => {
-        writeToScreen(`<div class="message"><b>${interlocutors[message.sender]}</b></br>${message.content}</div>`);
-    });
+    data.messages.forEach(message => addMessage(message));
 }
 
 function doSend() {
@@ -60,14 +67,18 @@ function doSend() {
         },
         body: JSON.stringify(data)
     })
-        .then(response => {
-            if (response.ok) {
-                writeToScreen("Message was sent");
-            }
-            else {
-                writeToScreen("Error. Cannot sent message");
-            }
-        });
+    .then(response => response.json().then(data => ({status: response.status, body: data})))
+    .then(data => {
+        if (data.status === 200) {
+            addMessage(data.body);
+        }
+        else {
+            writeToScreen(data.body.message);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 }
 
 function writeToScreen(message) {

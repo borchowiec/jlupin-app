@@ -1,14 +1,12 @@
 package com.example.controller;
 
-import com.example.common.pojo.AddUserRequest;
-import com.example.common.pojo.AuthenticateUserRequest;
-import com.example.common.pojo.AuthenticateUserResponse;
-import com.example.common.pojo.UserInfo;
+import com.example.common.pojo.*;
 import com.example.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,18 +21,21 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/add-user")
-    public boolean addUser(@RequestBody @Valid AddUserRequest request) {
-        return userService.addUser(request);
+    public ResponseEntity<?> addUser(@RequestBody @Valid AddUserRequest request) {
+        Response<?> response = userService.addUser(request);
+        return new ResponseEntity<>(response.getPayload(), response.getStatus());
     }
 
     @PostMapping("/authenticate")
-    public AuthenticateUserResponse authenticateUser(@RequestBody AuthenticateUserRequest request) {
-        return userService.getAuthenticationToken(request);
+    public ResponseEntity<?> authenticateUser(@RequestBody AuthenticateUserRequest request) {
+        Response<?> response = userService.getAuthenticationToken(request);
+        return new ResponseEntity<>(response.getPayload(), response.getStatus());
     }
 
     @GetMapping("/user")
-    public UserInfo getUserInfo(@RequestHeader("Authorization") String token) {
-        return userService.getUserInfo(token);
+    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token) {
+        Response<?> response = userService.getUserInfo(token);
+        return new ResponseEntity<>(response.getPayload(), response.getStatus());
     }
 
     @GetMapping("/users/by-phrase/{phrase}")

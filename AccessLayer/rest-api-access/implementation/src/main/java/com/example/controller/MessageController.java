@@ -1,9 +1,6 @@
 package com.example.controller;
 
-import com.example.common.pojo.AddMessageRequest;
-import com.example.common.pojo.Conversation;
-import com.example.common.pojo.Notification;
-import com.example.common.pojo.UserInfo;
+import com.example.common.pojo.*;
 import com.example.service.interfaces.MessageService;
 import com.example.service.interfaces.NotificationService;
 import com.jlupin.impl.client.util.queue.JLupinClientQueueUtil;
@@ -14,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,8 +42,8 @@ public class MessageController {
     private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     @PostMapping("/add-message")
-    public boolean addMessage(@RequestBody @Valid AddMessageRequest request,
-                                        @RequestHeader("Authorization") String token) throws JLupinClientQueueUtilException {
+    public ResponseEntity<?> addMessage(@RequestBody @Valid AddMessageRequest request,
+                                     @RequestHeader("Authorization") String token) throws JLupinClientQueueUtilException {
         final String taskId = messagesQueueClientUtil.putTaskInput(
                 "message",
                 "messageService",
@@ -63,27 +62,29 @@ public class MessageController {
 
                 @Override
                 public void onError(final String taskId, final Throwable throwable) {
-                    blockingMap.put(taskId, false);
+                    blockingMap.put(taskId, new Response<>(throwable, HttpStatus.INTERNAL_SERVER_ERROR));
                 }
             }
         );
 
-        boolean success = (boolean) blockingMap.get(taskId);
-        if (success) {
+        Response response = (Response) blockingMap.get(taskId);
+        if (response.getStatus() == HttpStatus.OK) {
             Notification notification = new Notification(request.getReceiver(), null, MESSAGE, request.getContent());
             notificationService.sendNotification(notification);
         }
-        return success;
+        return new ResponseEntity<>(response.getPayload(), response.getStatus());
     }
 
     @GetMapping("/conversation/{interlocutorId}")
-    public Conversation getConversation(@PathVariable String interlocutorId,
+    public ResponseEntity<?> getConversation(@PathVariable String interlocutorId,
                                         @RequestHeader("Authorization") String token) {
-        return messageService.getConversation(interlocutorId, token);
+        Response<?> response = messageService.getConversation(interlocutorId, token);
+        return new ResponseEntity<>(response.getPayload(), response.getStatus());
     }
 
     @GetMapping("/interlocutors")
-    public List<UserInfo> getInterlocutors(@RequestHeader("Authorization") String token) {
-        return messageService.getInterlocutors(token);
+    public ResponseEntity<?> getInterlocutors(@RequestHeader("Authorization") String token) {
+        Response<?> response = messageService.getInterlocutors(token);
+        return new ResponseEntity<>(response.getPayload(), response.getStatus());
     }
 }

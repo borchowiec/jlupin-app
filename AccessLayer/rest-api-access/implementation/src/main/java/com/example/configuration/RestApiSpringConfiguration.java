@@ -95,7 +95,7 @@ public class RestApiSpringConfiguration {
     @Bean
     public FilterRegistrationBean<AuthenticationFilter> authenticationFilter() {
         FilterRegistrationBean<AuthenticationFilter> authenticationFilter = new FilterRegistrationBean<>();
-        authenticationFilter.setFilter(new AuthenticationFilter(getUserService()));
+        authenticationFilter.setFilter(new AuthenticationFilter());
         authenticationFilter.addUrlPatterns("/add-message", "/conversation/*", "/task", "/tasks", "/task/*", "/user",
                 "/interlocutors");
         return authenticationFilter;

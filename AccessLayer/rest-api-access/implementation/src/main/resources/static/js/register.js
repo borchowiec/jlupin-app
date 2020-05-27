@@ -17,19 +17,18 @@ $(document).ready(function() {
                 },
                 body: JSON.stringify({username: username, password: password})
             })
-                .then(response => response.json())
+                .then(response => response.json().then(data => ({status: response.status, body: data})))
                 .then(data => {
-                    if (data.status === 400) {
-                        console.log(data);
-                        if (data.errors) {
-                            $(".errorMessage").text(`[${data.errors[0].field}] ${data.errors[0].defaultMessage}`);
+                    if (data.status === 200) {
+                        window.open("/rest-api/login.html", "_self");
+                    }
+                    else if (data.status === 400) {
+                        if (data.body.errors) {
+                            $(".errorMessage").text(`[${data.body.errors[0].field}] ${data.body.errors[0].defaultMessage}`);
                         }
                         else {
-                            $(".errorMessage").text(data.message);
+                            $(".errorMessage").text(data.body.message);
                         }
-                    }
-                    else {
-                        window.open("/rest-api/login.html", "_self");
                     }
                 })
                 .catch((error) => {

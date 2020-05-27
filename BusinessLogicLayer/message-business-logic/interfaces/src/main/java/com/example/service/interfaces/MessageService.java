@@ -1,13 +1,10 @@
 package com.example.service.interfaces;
 
 import com.example.common.pojo.AddMessageRequest;
-import com.example.common.pojo.Conversation;
-import com.example.common.pojo.UserInfo;
-
-import java.util.List;
+import com.example.common.pojo.Response;
 
 public interface MessageService {
-    boolean addMessage(AddMessageRequest request, String authenticationToken);
-    Conversation getConversation(String interlocutor, String authenticationToken);
-    List<UserInfo> getInterlocutors(String token);
+    Response<?> addMessage(AddMessageRequest request, String authenticationToken);
+    Response<?> getConversation(String interlocutor, String authenticationToken);
+    Response<?> getInterlocutors(String token);
 }
