@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,10 +32,21 @@ public class MessageServiceImpl implements MessageService {
     private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     @Override
-    public boolean addMessage(AddMessageRequest request, String authenticationToken) {
+    public Response<?> addMessage(AddMessageRequest request, String authenticationToken) {
         String sender = tokenProvider.getId(authenticationToken);
+
+        if (!userStorage.existsById(sender)) {
+            String msg = String.format("Not found user of id %s. Try to log out and log in.", request.getReceiver());
+            return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
+        }
         request.setSender(sender);
-        return messageStorage.addMessage(request);
+
+        if (!userStorage.existsById(request.getReceiver())) {
+            String msg = String.format("Not found user of id %s.", request.getReceiver());
+            return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
+        }
+
+        return new Response<>(messageStorage.addMessage(request), HttpStatus.OK);
     }
 
     @Override

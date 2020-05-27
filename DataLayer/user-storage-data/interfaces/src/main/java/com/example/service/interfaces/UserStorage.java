@@ -9,6 +9,7 @@ import java.util.List;
 public interface UserStorage {
     boolean addUser(AddUserRequest addUserRequest);
     boolean existsByUsername(String username);
+    boolean existsById(String userId);
     User findByUsername(String username);
     List<User> findByIds(String... ids);
     User getUser(String userId);

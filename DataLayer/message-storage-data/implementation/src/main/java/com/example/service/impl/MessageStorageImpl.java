@@ -22,10 +22,9 @@ public class MessageStorageImpl implements MessageStorage {
     private static final Logger logger = LoggerFactory.getLogger(MessageStorageImpl.class);
 
     @Override
-    public boolean addMessage(AddMessageRequest request) {
+    public Message addMessage(AddMessageRequest request) {
         Message message = new Message(request);
-        messageRepository.addMessage(message);
-        return true;
+        return messageRepository.addMessage(message);
     }
 
     @Override

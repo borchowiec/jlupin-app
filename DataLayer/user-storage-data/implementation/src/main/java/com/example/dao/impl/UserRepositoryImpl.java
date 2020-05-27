@@ -44,6 +44,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public boolean existsById(String userId) {
+        return users.containsKey(userId);
+    }
+
+    @Override
     public Optional<User> findByUsername(String username) {
         return users.values().stream()
                 .filter(user -> user.getUsername().equals(username))
