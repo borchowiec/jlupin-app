@@ -3,105 +3,33 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Messages</title>
+    <title>Conversation</title>
+    <link rel="stylesheet" href="./css/style.css">
     <style>
         .message {
-            border-bottom: 1px solid black;
+            border-bottom: 1px solid #d0d0d0;
             margin-up: 10px;
         }
     </style>
 </head>
 
 <body>
-<h2>Messages</h2>
-<div style="width: 1000px; margin: 0 auto;">
+<div class="navbar"></div>
+<div class="container">
+    <h2>Conversation</h2>
     <div id="output"></div>
     <input type="text" id="input" style="width: 100%"/><br>
     <button onclick="doSend()" style="width: 100%">Send</button>
 </div>
+<div class="notification-box" style="display: none"></div>
 
+<script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+        integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+        crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-<script language="javascript" type="text/javascript">
-    var url = "http://localhost:8000/rest-api/";
-    var input;
-    var output;
-    var userId;
-    var authCookie;
-
-    var interlocutors;
-
-    function init() {
-        var urlParams = new URLSearchParams(window.location.search);
-        userId = urlParams.get('userId');
-        authCookie = Cookies.get("Authorization");
-
-        input = document.getElementById("input");
-        output = document.getElementById("output");
-
-        if (!userId) {
-            writeToScreen("Not found userId variable!")
-        }
-        else if (!authCookie) {
-            writeToScreen("Not found authorization token!")
-        }
-        else {
-            fetch(url + "conversation/" + userId, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': authCookie
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                initConversation(data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        }
-    }
-
-    function initConversation(data) {
-        interlocutors = data.interlocutors;
-
-        data.messages.forEach(message => {
-            writeToScreen(`<div class="message"><b>${interlocutors[message.sender]}</b></br>${message.content}</div>`);
-        });
-    }
-
-    function doSend() {
-        var content = input.value;
-        input.value = "";
-
-        var data = {receiver: userId, content: content};
-
-        fetch(url + "add-message", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': authCookie
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (response.ok) {
-                writeToScreen("Message was sent");
-            }
-            else {
-                writeToScreen("Error. Cannot sent message");
-            }
-        });
-    }
-
-    function writeToScreen(message) {
-        var pre = document.createElement("p");
-        pre.style.wordWrap = "break-word";
-        pre.innerHTML = message;
-        output.appendChild(pre);
-    }
-
-    window.addEventListener("load", init, false);
-</script>
+<script src="./js/auth.js"></script>
+<script src="./js/notifications.js"></script>
+<script src="./js/navbar.js"></script>
+<script src="./js/conversation.js"></script>
 </body>
 </html>
