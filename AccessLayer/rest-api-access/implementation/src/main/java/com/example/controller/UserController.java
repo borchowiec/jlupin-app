@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -34,5 +35,10 @@ public class UserController {
     @GetMapping("/user")
     public UserInfo getUserInfo(@RequestHeader("Authorization") String token) {
         return userService.getUserInfo(token);
+    }
+
+    @GetMapping("/users/by-phrase/{phrase}")
+    public List<UserInfo> getUsersByPhrase(@PathVariable String phrase) {
+        return userService.getUsersByPhrase(phrase);
     }
 }

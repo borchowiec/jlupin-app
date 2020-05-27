@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service(value = "userService")
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -68,5 +70,10 @@ public class UserServiceImpl implements UserService {
         String id = tokenProvider.getId(token);
         User user = userStorage.getUser(id);
         return new UserInfo(user);
+    }
+
+    @Override
+    public List<UserInfo> getUsersByPhrase(String phrase) {
+        return userStorage.getUsersByPhrase(phrase);
     }
 }

@@ -12,4 +12,5 @@ public interface UserStorage {
     User findByUsername(String username);
     List<User> findByIds(String... ids);
     User getUser(String userId);
+    List<UserInfo> getUsersByPhrase(String phrase);
 }

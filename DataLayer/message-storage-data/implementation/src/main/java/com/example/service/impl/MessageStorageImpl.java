@@ -32,4 +32,9 @@ public class MessageStorageImpl implements MessageStorage {
     public List<Message> getConversation(String interlocutorA, String interlocutorB) {
         return messageRepository.getConversation(interlocutorA, interlocutorB);
     }
+
+    @Override
+    public List<String> getInterlocutors(String userId) {
+        return messageRepository.getInterlocutors(userId);
+    }
 }
