@@ -5,19 +5,22 @@
     <title>JLupin App</title>
     <link rel="stylesheet" href="./css/style.css">
     <style>
-        .container {
+        .taskList {
             background-color: white;
+            padding: 0 20px;
         }
 
-        .column {
-            text-align: center;
-            display: inline-block;
-            width: 49%;
+        .taskList li {
+            border-bottom: 1px solid #c4c4c4;
         }
 
-        .username {
+        .taskList .taskContent, .taskList .taskContentEdit {
+            width: 750px;
             display: inline-block;
-            min-width: 300px;
+        }
+
+        .newTaskInput, .addTaskBtn {
+            width: 100%;
         }
     </style>
 </head>
@@ -25,17 +28,10 @@
     <div class="navbar"></div>
     <div class="notification-box" style="display: none"></div>
     <div class="container">
-        <div class="column">
-            <h2>Conversations</h2>
-            <ul class="conversations">
-            </ul>
-        </div>
-        <div class="column">
-            <h2>Find user</h2>
-            <input type="text" class="usernameInput" placeholder="type username">
-            <button class="findUserBtn">FIND</button>
-            <ul class="result"></ul>
-        </div>
+        <ul class="taskList"></ul>
+
+        <input type="text" class="newTaskInput"></br>
+        <button class="addTaskBtn">Add new task</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
@@ -45,6 +41,6 @@
     <script src="./js/auth.js"></script>
     <script src="./js/notifications.js"></script>
     <script src="./js/navbar.js"></script>
-    <script src="./js/messages.js"></script>
+    <script src="./js/tasks.js"></script>
 </body>
 </html>

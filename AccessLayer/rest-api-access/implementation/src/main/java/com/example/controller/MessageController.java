@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.common.pojo.AddMessageRequest;
 import com.example.common.pojo.Conversation;
 import com.example.common.pojo.Notification;
+import com.example.common.pojo.UserInfo;
 import com.example.service.interfaces.MessageService;
 import com.example.service.interfaces.NotificationService;
 import com.jlupin.impl.client.util.queue.JLupinClientQueueUtil;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static com.example.common.pojo.NotificationType.MESSAGE;
 
@@ -77,5 +80,10 @@ public class MessageController {
     public Conversation getConversation(@PathVariable String interlocutorId,
                                         @RequestHeader("Authorization") String token) {
         return messageService.getConversation(interlocutorId, token);
+    }
+
+    @GetMapping("/interlocutors")
+    public List<UserInfo> getInterlocutors(@RequestHeader("Authorization") String token) {
+        return messageService.getInterlocutors(token);
     }
 }
