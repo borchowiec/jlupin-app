@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JLupin App</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .taskList {
+            background-color: white;
+            padding: 0 20px;
+        }
+
+        .taskList li {
+            border-bottom: 1px solid #c4c4c4;
+        }
+
+        .taskList .taskContent, .taskList .taskContentEdit {
+            width: 750px;
+            display: inline-block;
+        }
+
+        .newTaskInput, .addTaskBtn {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar"></div>
+    <div class="notification-box" style="display: none"></div>
+    <div class="container">
+        <ul class="taskList"></ul>
+
+        <input type="text" class="newTaskInput"></br>
+        <button class="addTaskBtn">Add new task</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+            integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/notifications.js"></script>
+    <script src="./js/navbar.js"></script>
+    <script src="./js/tasks.js"></script>
+</body>
+</html>
