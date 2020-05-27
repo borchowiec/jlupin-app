@@ -79,13 +79,20 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<UserInfo> getInterlocutors(String token) {
+    public Response<?> getInterlocutors(String token) {
         String userId = tokenProvider.getId(token);
         List<String> interlocutorsIds = messageStorage.getInterlocutors(userId);
-        return userStorage
+
+        if (!userStorage.existsById(userId)) {
+            String msg = String.format("Not found user of id %s. Try to log out and log in.", userId);
+            return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
+        }
+
+        List<UserInfo> collect = userStorage
                 .findByIds(interlocutorsIds.toArray(new String[interlocutorsIds.size()]))
                 .stream()
                 .map(UserInfo::new)
                 .collect(Collectors.toList());
+        return new Response<>(collect, HttpStatus.OK);
     }
 }

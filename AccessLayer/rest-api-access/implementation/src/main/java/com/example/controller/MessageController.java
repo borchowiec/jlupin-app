@@ -83,7 +83,8 @@ public class MessageController {
     }
 
     @GetMapping("/interlocutors")
-    public List<UserInfo> getInterlocutors(@RequestHeader("Authorization") String token) {
-        return messageService.getInterlocutors(token);
+    public ResponseEntity<?> getInterlocutors(@RequestHeader("Authorization") String token) {
+        Response<?> response = messageService.getInterlocutors(token);
+        return new ResponseEntity<>(response.getPayload(), response.getStatus());
     }
 }
