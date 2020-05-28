@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task implements Serializable {
-    private long id;
-    private long owner;
+    private String id;
+    private String owner;
 
     @NotNull
     private String message;

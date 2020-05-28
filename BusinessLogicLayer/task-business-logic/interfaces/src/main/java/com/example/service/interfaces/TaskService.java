@@ -7,6 +7,6 @@ import java.util.List;
 public interface TaskService {
     Task insert(Task task, String authenticationToken);
     Task save(Task task, String authenticationToken);
-    boolean delete(long task, String authenticationToken);
+    boolean delete(String task, String authenticationToken);
     List<Task> getTasks(String authenticationToken);
 }

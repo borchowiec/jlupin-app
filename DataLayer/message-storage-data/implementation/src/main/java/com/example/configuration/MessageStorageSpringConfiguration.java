@@ -19,11 +19,6 @@ public class MessageStorageSpringConfiguration {
         return JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.JLRMC);
     }
 
-    @Bean("userStorage")
-    public UserStorage getUserStorage() {
-        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "user-storage", UserStorage.class);
-    }
-
     @Bean(name = "jLupinRegularExpressionToRemotelyEnabled")
     public List getRemotelyBeanList() {
         List<String> list = new ArrayList<>();

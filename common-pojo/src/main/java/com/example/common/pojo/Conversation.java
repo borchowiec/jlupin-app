@@ -8,6 +8,6 @@ import java.util.Map;
 
 @Data
 public class Conversation implements Serializable {
-    private Map<Long, String> interlocutors; // {userId : username}
+    private Map<String, String> interlocutors; // {userId : username}
     private List<Message> messages;
 }

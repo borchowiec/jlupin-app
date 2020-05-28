@@ -6,6 +6,10 @@ import java.util.Arrays;
 
 public class StringUtils {
     public static String getValueFromCookies(String stringCookies, String key) {
+        if (stringCookies == null || key == null) {
+            return null;
+        }
+
         return Arrays
                 .stream(stringCookies.split(";")).map(element -> {
                     String[] keyValue = element.split("=");

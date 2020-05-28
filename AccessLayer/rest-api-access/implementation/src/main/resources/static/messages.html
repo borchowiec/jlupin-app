@@ -1,81 +1,50 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>Messages</title>
+    <meta charset="UTF-8">
+    <title>JLupin App</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .container {
+            background-color: white;
+        }
+
+        .column {
+            text-align: center;
+            display: inline-block;
+            width: 49%;
+        }
+
+        .username {
+            display: inline-block;
+            min-width: 300px;
+        }
+    </style>
 </head>
-<h2>Messages</h2>
+<body>
+    <div class="navbar"></div>
+    <div class="notification-box" style="display: none"></div>
+    <div class="container">
+        <div class="column">
+            <h2>Conversations</h2>
+            <ul class="conversations">
+            </ul>
+        </div>
+        <div class="column">
+            <h2>Find user</h2>
+            <input type="text" class="usernameInput" placeholder="type username">
+            <button class="findUserBtn">FIND</button>
+            <ul class="result"></ul>
+        </div>
+    </div>
 
-<input type="text" id="input"/>
-<button onclick="doSend()">Send</button>
-<div id="output"></div>
-
-</div>
-
-<script language="javascript" type="text/javascript">
-    var wsUri = "ws://localhost:8000/rest-api/messages";
-    var input;
-    var output;
-    var userId;
-
-    function init()
-    {
-        urlParams = new URLSearchParams(window.location.search);
-        userId = urlParams.get('userId');
-
-        if (userId) {
-            input = document.getElementById("input");
-            output = document.getElementById("output");
-            testWebSocket();
-        }
-        else {
-            writeToScreen("Not found userId variable!")
-        }
-    }
-
-    function testWebSocket()
-    {
-        websocket = new WebSocket(wsUri);
-        websocket.onopen = function(evt) { onOpen(evt) };
-        websocket.onclose = function(evt) { onClose(evt) };
-        websocket.onmessage = function(evt) { onMessage(evt) };
-        websocket.onerror = function(evt) { onError(evt) };
-    }
-
-    function onOpen(evt)
-    {
-        writeToScreen("CONNECTED");
-    }
-
-    function onClose(evt)
-    {
-        writeToScreen("DISCONNECTED");
-    }
-
-    function onMessage(evt)
-    {
-        writeToScreen('<span style="color: blue;">SENT:</span> ' + evt.data);
-    }
-
-    function onError(evt)
-    {
-        writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
-    }
-
-    function doSend() {
-        writeToScreen("MESSAGE: " + input.value);
-        websocket.send(JSON.stringify({receiver: userId, content: input.value}));
-        input.value = "";
-    }
-
-    function writeToScreen(message)
-    {
-        var pre = document.createElement("p");
-        pre.style.wordWrap = "break-word";
-        pre.innerHTML = message;
-        output.appendChild(pre);
-    }
-
-    window.addEventListener("load", init, false);
-</script>
+    <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+            integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/notifications.js"></script>
+    <script src="./js/navbar.js"></script>
+    <script src="./js/messages.js"></script>
 </body>
 </html>

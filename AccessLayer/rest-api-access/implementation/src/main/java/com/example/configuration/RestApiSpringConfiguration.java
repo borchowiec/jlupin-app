@@ -2,13 +2,15 @@ package com.example.configuration;
 
 import com.example.bean.impl.AuthenticationFilter;
 import com.example.service.interfaces.MessageService;
-import com.example.service.interfaces.SampleChannelWriter;
+import com.example.service.interfaces.NotificationService;
 import com.example.service.interfaces.TaskService;
 import com.example.service.interfaces.UserService;
 import com.jlupin.impl.client.delegator.balance.JLupinQueueLoadBalancerDelegatorImpl;
 import com.jlupin.impl.client.util.JLupinClientUtil;
 import com.jlupin.impl.client.util.channel.JLupinClientChannelIterableProducer;
+import com.jlupin.impl.client.util.channel.JLupinClientChannelUtil;
 import com.jlupin.impl.client.util.queue.JLupinClientQueueUtil;
+import com.jlupin.impl.util.map.JLupinBlockingMap;
 import com.jlupin.interfaces.client.delegator.JLupinDelegator;
 import com.jlupin.interfaces.common.enums.PortType;
 import com.jlupin.interfaces.microservice.partofjlupin.asynchronous.service.channel.JLupinChannelManagerService;
@@ -23,6 +25,14 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan("com.example")
 @EnableJLupinSpringBootServletMonitor
 public class RestApiSpringConfiguration {
+
+    @Bean(name = "blockingMap")
+    public JLupinBlockingMap getJLupinBlockingMap() {
+        return new JLupinBlockingMap();
+    }
+
+
+
     @Bean
     public JLupinDelegator getQueueJLupinDelegator() {
         final JLupinDelegator jLupinDelegator = JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.QUEUE);
@@ -35,21 +45,24 @@ public class RestApiSpringConfiguration {
         return JLupinClientUtil.generateRemote(getQueueJLupinDelegator(), "queueMicroservice", "jLupinQueueManagerService", JLupinQueueManagerService.class);
     }
 
-    @Bean(name = "sampleQueueClientUtil")
-    public JLupinClientQueueUtil getSampleQueueClientUtil() {
+    @Bean(name = "messagesQueueClientUtil")
+    public JLupinClientQueueUtil getMessagesQueueClientUtil() {
         return new JLupinClientQueueUtil("MESSAGES", getJLupinQueueManagerService());
     }
 
 
 
-    @Bean(name = "sampleChannelWriter")
-    public SampleChannelWriter getSampleChannelWriter() {
-        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "notification", SampleChannelWriter.class);
-    }
-
     @Bean
     public JLupinChannelManagerService getJLupinChannelManagerService() {
         return JLupinClientUtil.generateRemote(getJLupinDelegator(), "channelMicroservice", "jLupinChannelManagerService", JLupinChannelManagerService.class);
+    }
+
+    @Bean(name="jLupinClientChannelUtil")
+    public JLupinClientChannelUtil getJLupinClientChannelUtil() {
+        JLupinChannelManagerService jLupinChannelManagerService = JLupinClientUtil.generateRemote(
+                getJLupinDelegator(), "channelMicroservice", "jLupinChannelManagerService", JLupinChannelManagerService.class);
+
+        return new JLupinClientChannelUtil("SAMPLE", jLupinChannelManagerService);
     }
 
     @Bean
@@ -62,6 +75,11 @@ public class RestApiSpringConfiguration {
     @Bean
     public JLupinDelegator getJLupinDelegator() {
         return JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.JLRMC);
+    }
+
+    @Bean(name = "notificationService")
+    public NotificationService getNotificationService() {
+        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "notification", NotificationService.class);
     }
 
     @Bean(name = "userService")
@@ -79,11 +97,14 @@ public class RestApiSpringConfiguration {
         return JLupinClientUtil.generateRemote(getJLupinDelegator(), "task", TaskService.class);
     }
 
+
+
     @Bean
     public FilterRegistrationBean<AuthenticationFilter> authenticationFilter() {
         FilterRegistrationBean<AuthenticationFilter> authenticationFilter = new FilterRegistrationBean<>();
-        authenticationFilter.setFilter(new AuthenticationFilter(getUserService()));
-        authenticationFilter.addUrlPatterns("/add-message", "/conversation/*", "/task", "/tasks", "/task/*");
+        authenticationFilter.setFilter(new AuthenticationFilter());
+        authenticationFilter.addUrlPatterns("/add-message", "/conversation/*", "/task", "/tasks", "/task/*", "/user",
+                "/interlocutors");
         return authenticationFilter;
     }
 }

@@ -14,6 +14,8 @@
     <orderEntry type="module" module-name="message-interfaces" />
     <orderEntry type="module" module-name="user-interfaces" />
     <orderEntry type="module" module-name="message-storage-interfaces" />
+    <orderEntry type="module" module-name="notification-interfaces" />
+    <orderEntry type="module" module-name="user-storage-interfaces" />
     <orderEntry type="library" name="Maven: com.jlupin:jlupin-platform-native:1.6.1.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.8" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.8" level="project" />
@@ -56,6 +58,8 @@
     <orderEntry type="library" name="Maven: xpp3:xpp3_min:1.1.4c" level="project" />
     <orderEntry type="library" name="Maven: com.thoughtworks.xstream:xstream:1.4.10" level="project" />
     <orderEntry type="module" module-name="common-util" />
+    <orderEntry type="library" name="Maven: com.auth0:java-jwt:3.10.3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: commons-codec:commons-codec:1.14" level="project" />
     <orderEntry type="module" module-name="common-pojo" />
     <orderEntry type="library" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.12" level="project" />

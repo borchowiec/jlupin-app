@@ -17,6 +17,11 @@
     <orderEntry type="module" module-name="common-pojo" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
     <orderEntry type="module" module-name="common-util" scope="TEST" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.auth0:java-jwt:3.10.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: commons-codec:commons-codec:1.14" level="project" />
     <orderEntry type="module" module-name="user-interfaces" scope="TEST" />
     <orderEntry type="module" module-name="user-storage-interfaces" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Maven: com.jlupin:jlupin-client-assembly:1.6.1.0" level="project" />

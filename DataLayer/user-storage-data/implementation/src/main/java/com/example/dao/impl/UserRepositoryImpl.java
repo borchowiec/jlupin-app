@@ -9,38 +9,43 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository(value = "userRepository")
 public class UserRepositoryImpl implements UserRepository {
 
-    private Map<Long, User> users = new HashMap<>();
-    private static long nextId = 0L;
+    private Map<String, User> users = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
     @PostConstruct
     public void addExampleUsers() {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        put(new User(0, "admin", passwordEncoder.encode("password")));
-        put(new User(0, "username123", passwordEncoder.encode("password")));
-        put(new User(0, "userr", passwordEncoder.encode("password")));
-        put(new User(0, "admin3", passwordEncoder.encode("password")));
+        insert(new User(UUID.randomUUID().toString(), "admin", passwordEncoder.encode("password")));
+        insert(new User(UUID.randomUUID().toString(), "username123", passwordEncoder.encode("password")));
+        insert(new User(UUID.randomUUID().toString(), "userr", passwordEncoder.encode("password")));
+        insert(new User(UUID.randomUUID().toString(), "admin3", passwordEncoder.encode("password")));
+        insert(new User(UUID.randomUUID().toString(), "janek", passwordEncoder.encode("paswds")));
     }
 
     @Override
-    public User put(User user) {
+    public User insert(User user) {
         User copy = new User(user);
-        copy.setId(nextId);
-        nextId++;
+        String id = UUID.randomUUID().toString();
+        copy.setId(id);
         users.put(copy.getId(), copy);
+        logger.info(users.toString());
         return copy;
     }
 
     @Override
     public boolean existsByUsername(String username) {
         return users.entrySet().stream().anyMatch(entry -> entry.getValue().getUsername().equals(username));
+    }
+
+    @Override
+    public boolean existsById(String userId) {
+        return users.containsKey(userId);
     }
 
     @Override
@@ -51,7 +56,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findById(long id) {
+    public User findById(String id) {
         return users.get(id);
+    }
+
+    @Override
+    public List<User> findUsersByPhrase(String phrase) {
+        return users
+                .values()
+                .stream()
+                .filter(user -> user.getUsername().toLowerCase().contains(phrase.toLowerCase()))
+                .collect(Collectors.toList());
     }
 }

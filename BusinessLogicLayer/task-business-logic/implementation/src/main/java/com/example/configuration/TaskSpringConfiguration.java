@@ -25,11 +25,6 @@ public class TaskSpringConfiguration {
          return JLupinClientUtil.generateRemote(getJLupinDelegator(), "task-storage", TaskStorage.class);
      }
 
-    @Bean(name = "userService")
-    public UserService getUserService() {
-        return JLupinClientUtil.generateRemote(getJLupinDelegator(), "user", UserService.class);
-    }
-
     @Bean(name = "jLupinRegularExpressionToRemotelyEnabled")
     public List getRemotelyBeanList() {
         List<String> list = new ArrayList<>();

@@ -1,64 +1,63 @@
 package com.example.dao.impl;
 
-import com.example.common.pojo.Conversation;
 import com.example.common.pojo.Message;
-import com.example.common.pojo.User;
 import com.example.dao.interfaces.MessageRepository;
-import com.example.service.interfaces.UserStorage;
+import javafx.util.Pair;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Repository(value = "messageRepository")
 public class MessageRepositoryImpl implements MessageRepository {
-
-    @Autowired
-    @Qualifier("userStorage")
-    private UserStorage userStorage;
-    private Map<Long, Message> messages = new HashMap<>();
-
-    private static long nextId = 0L;
+    private Map<String, Message> messages = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(MessageRepositoryImpl.class);
 
     @Override
     public Message addMessage(Message message) {
         Message copy = new Message(message);
-        copy.setId(nextId);
-        nextId++;
+        String id = UUID.randomUUID().toString();
+        copy.setId(id);
         messages.put(copy.getId(), copy);
         return copy;
     }
 
     @Override
-    public Conversation getConversation(long interlocutorA, long interlocutorB) {
-        Conversation conversation = new Conversation();
-
-        Map<Long, String> interlocutors = userStorage
-                .findByIds(interlocutorA, interlocutorB)
+    public List<Message> getConversation(String interlocutorA, String  interlocutorB) {
+        return messages.values()
                 .stream()
-                .collect(Collectors.toMap(User::getId, User::getUsername));
-
-        List<Message> conversationMessages = messages.values()
-                .stream()
-                .filter(message -> (message.getSender() == interlocutorA && message.getReceiver() == interlocutorB)
-                        || (message.getSender() == interlocutorB && message.getReceiver() == interlocutorA))
+                .filter(message -> (message.getSender().equals(interlocutorA) && message.getReceiver().equals(interlocutorB))
+                        || (message.getSender().equals(interlocutorB) && message.getReceiver().equals(interlocutorA)))
                 .sorted(Comparator.comparing(Message::getSendTime))
                 .collect(Collectors.toList());
+    }
 
-        conversation.setMessages(conversationMessages);
-        conversation.setInterlocutors(interlocutors);
-        return conversation;
+    @Override
+    public List<String> getInterlocutors(String userId) {
+        List<Pair<LocalDateTime, String>> sendTimeAndInterlocutor = messages.values()
+                .stream()
+                .filter(message -> message.getSender().equals(userId) || message.getReceiver().equals(userId))
+                .map(message -> new Pair<>(message.getSendTime(),
+                        message.getSender().equals(userId) ? message.getReceiver() : message.getSender()))
+                .sorted(Comparator.comparing(Pair::getKey))
+                .collect(Collectors.toList());
+
+        List<String> result = new LinkedList<>();
+
+        for (Pair<LocalDateTime, String> pair : sendTimeAndInterlocutor) {
+            if (!result.contains(pair.getValue())) {
+                result.add(pair.getValue());
+            }
+        }
+
+        Collections.reverse(result);
+        return result;
     }
 }
