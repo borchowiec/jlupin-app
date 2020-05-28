@@ -18,6 +18,8 @@ public class NotificationServiceImpl implements NotificationService {
     private static final Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
 
     private Set<ChannelContext> channelContexts = new HashSet<>();
+    private String channelId;
+
 
     @Autowired
     private JLupinClientChannelUtil jLupinClientChannelUtil;
@@ -25,7 +27,12 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void sendNotification(Notification notification) {
         logger.info("[SEND {}] after: {}", notification.toString(), channelContexts.toString());
-        channelContexts.stream()
+        try {
+            jLupinClientChannelUtil.putNextElementToStreamChannel(channelId, notification);
+        } catch (JLupinClientChannelUtilException e) {
+            logger.error("Cannot put element to {}.", channelId);
+        }
+        /*channelContexts.stream()
                 .filter(context -> context.getUserId().equals(notification.getReceiver())) // send only to receivers
                 .forEach(context -> {
                     try {
@@ -34,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
                     } catch (JLupinClientChannelUtilException e) {
                         logger.error("Cannot put element to {}.", context.getChannelId());
                     }
-                });
+                });*/
     }
 
     @Override
@@ -65,5 +72,10 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         logger.info("[CLOSE {}] after: {}", sessionId, channelContexts.toString());
+    }
+
+    @Override
+    public void setChannel(String channelId) {
+        this.channelId = channelId;
     }
 }

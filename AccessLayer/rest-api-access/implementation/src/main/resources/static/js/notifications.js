@@ -25,6 +25,7 @@ function onClose(evt) {
 }
 
 function onMessage(evt) {
+    console.log("message: ", evt);
     data = JSON.parse(evt.data);
     const box = $(".notification-box");
 
