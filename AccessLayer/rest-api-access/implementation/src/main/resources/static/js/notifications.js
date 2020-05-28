@@ -22,7 +22,7 @@ function onOpen(evt) {
 function onClose(evt) {
     console.log(evt);
     console.log("[NOTIFICATIONS] disconnected");
-    //connect();
+    connect();
 }
 
 function onMessage(evt) {
