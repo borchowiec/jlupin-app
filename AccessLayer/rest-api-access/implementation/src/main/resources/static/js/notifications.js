@@ -1,10 +1,13 @@
-var wsUri = "ws://localhost:8000/rest-api/notifications";
+const wsUri = "ws://localhost:8000/rest-api/notifications";
 
 function initNotifications() {
-    connect();
+    if (getAuthCookie()) {
+        connect();
+    }
 }
 
 function connect() {
+    console.log("[NOTIFICATIONS] connecting");
     websocket = new WebSocket(wsUri);
     websocket.onopen = function(evt) { onOpen(evt) };
     websocket.onclose = function(evt) { onClose(evt) };
@@ -13,19 +16,27 @@ function connect() {
 }
 
 function onOpen(evt) {
-    console.log("[NOTIFICATIONS] connected")
+    console.log("[NOTIFICATIONS] connected");
 }
 
 function onClose(evt) {
-    console.log("[NOTIFICATIONS] disconnected")
+    console.log(evt);
+    console.log("[NOTIFICATIONS] disconnected");
+    connect();
 }
 
 function onMessage(evt) {
+    console.log("message: ", evt);
     data = JSON.parse(evt.data);
     const box = $(".notification-box");
 
     box.empty();
-    box.append(`<p><b>New message!</b></p><p>${data.content}</p>`);
+    if (data.type === "MESSAGE") {
+        box.append(`<a href="conversation.html?userId=${data.sender}"><p style="font-size: 20px"><b>New message!</b></p><p style="font-size: 16px">${data.content}</p></a>`);
+    }
+    else {
+        box.append(`<p>${data.content}</p>`);
+    }
     box.show();
 
     setTimeout(() => box.hide(), 3000)
