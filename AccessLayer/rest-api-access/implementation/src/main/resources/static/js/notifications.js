@@ -1,10 +1,13 @@
-var wsUri = "ws://localhost:8000/rest-api/notifications";
+const wsUri = "ws://localhost:8000/rest-api/notifications";
 
 function initNotifications() {
-    connect();
+    if (getAuthCookie()) {
+        connect();
+    }
 }
 
 function connect() {
+    console.log("[NOTIFICATIONS] connecting");
     websocket = new WebSocket(wsUri);
     websocket.onopen = function(evt) { onOpen(evt) };
     websocket.onclose = function(evt) { onClose(evt) };
@@ -13,11 +16,12 @@ function connect() {
 }
 
 function onOpen(evt) {
-    console.log("[NOTIFICATIONS] connected")
+    console.log("[NOTIFICATIONS] connected");
 }
 
 function onClose(evt) {
-    console.log("[NOTIFICATIONS] disconnected")
+    console.log("[NOTIFICATIONS] disconnected");
+    //connect();
 }
 
 function onMessage(evt) {

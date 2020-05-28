@@ -16,6 +16,8 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
+
 @Component(value = "notificationWebSocketHandler")
 public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
 
@@ -45,12 +47,21 @@ public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
             String userId = tokenProvider.getId(token);
             String chanelId = jLupinClientChannelUtil.openStreamChannel();
 
+            logger.info("[connect {}] {}", session.getId(), chanelId);
+
             notificationService.addChannel(userId, session.getId(), chanelId);
             Iterable iterable = jLupinClientChannelIterableProducer.produceChannelIterable("SAMPLE", chanelId);
 
-            for (Object notification : iterable) {
-                session.sendMessage(new TextMessage(objectMapper.writeValueAsString(notification)));
-            }
+            new Thread(() -> {
+                for (Object notification : iterable) {
+                    try {
+                        logger.info("[receive]: {}", chanelId);
+                        session.sendMessage(new TextMessage(objectMapper.writeValueAsString(notification)));
+                    } catch (IOException e) {
+                        logger.error(e.getMessage());
+                    }
+                }
+            }).start();
         }
         else {
             session.close();
@@ -59,6 +70,7 @@ public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        notificationService.closeChannel(session.getId());
+        //notificationService.closeChannel(session.getId());
+        //logger.info("[disconnect {}]", session.getId());
     }
 }
