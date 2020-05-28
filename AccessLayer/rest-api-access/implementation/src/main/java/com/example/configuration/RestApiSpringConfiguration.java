@@ -25,16 +25,19 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan("com.example")
 @EnableJLupinSpringBootServletMonitor
 public class RestApiSpringConfiguration {
+
+    @Bean(name = "blockingMap")
+    public JLupinBlockingMap getJLupinBlockingMap() {
+        return new JLupinBlockingMap();
+    }
+
+
+
     @Bean
     public JLupinDelegator getQueueJLupinDelegator() {
         final JLupinDelegator jLupinDelegator = JLupinClientUtil.generateInnerMicroserviceLoadBalancerDelegator(PortType.QUEUE);
         ((JLupinQueueLoadBalancerDelegatorImpl) jLupinDelegator).setGetStatusAnalyseAndChooseHighestFromAllEnvironment(true);
         return jLupinDelegator;
-    }
-
-    @Bean(name = "blockingMap")
-    public JLupinBlockingMap getJLupinBlockingMap() {
-        return new JLupinBlockingMap();
     }
 
     @Bean
@@ -46,6 +49,8 @@ public class RestApiSpringConfiguration {
     public JLupinClientQueueUtil getMessagesQueueClientUtil() {
         return new JLupinClientQueueUtil("MESSAGES", getJLupinQueueManagerService());
     }
+
+
 
     @Bean
     public JLupinChannelManagerService getJLupinChannelManagerService() {
@@ -91,6 +96,8 @@ public class RestApiSpringConfiguration {
     public TaskService getTaskService() {
         return JLupinClientUtil.generateRemote(getJLupinDelegator(), "task", TaskService.class);
     }
+
+
 
     @Bean
     public FilterRegistrationBean<AuthenticationFilter> authenticationFilter() {

@@ -1,7 +1,6 @@
 package com.example.service.impl;
 
 import com.example.common.pojo.AddMessageRequest;
-import com.example.common.pojo.Conversation;
 import com.example.common.pojo.Message;
 import com.example.dao.interfaces.MessageRepository;
 import com.example.service.interfaces.MessageStorage;

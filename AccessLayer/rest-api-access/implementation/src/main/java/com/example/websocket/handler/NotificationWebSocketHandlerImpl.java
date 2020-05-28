@@ -62,6 +62,7 @@ public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
                     .produceChannelIterable("SAMPLE", channelId);
             Iterator iterator = iterable.iterator();
 
+            // while channel is open
             JLupinStreamChannelStatusType channelStatus = JLupinStreamChannelStatusType.STREAM_CHANNEL_OPEN;
             while (channelStatus.equals(JLupinStreamChannelStatusType.STREAM_CHANNEL_OPEN)) {
                 try {
@@ -70,8 +71,10 @@ public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
                     e.printStackTrace();
                 }
 
+                // receive notifications
                 while (iterator.hasNext()) {
                     Notification notification = (Notification) iterator.next();
+                    // send notification to receivers
                     for (Pair<String, WebSocketSession> pair: sessions) {
                         String sessionUser = pair.getKey();
                         WebSocketSession session = pair.getValue();
@@ -90,7 +93,7 @@ public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession newSession) throws Exception {
-        // open channel
+        // open channel and start listening
         if (channelId == null) {
             startListening();
         }
@@ -100,7 +103,7 @@ public class NotificationWebSocketHandlerImpl extends TextWebSocketHandler {
         String token = StringUtils.getValueFromCookies(stringCookies, "Authorization");
 
         if (token != null) {
-            // put save session data
+            // save session data
             String userId = tokenProvider.getId(token);
             sessions.add(new Pair<>(userId, newSession));
         }

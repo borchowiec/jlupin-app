@@ -81,6 +81,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Response<?> getInterlocutors(String token) {
         String userId = tokenProvider.getId(token);
+        // get interlocutors ids
         List<String> interlocutorsIds = messageStorage.getInterlocutors(userId);
 
         if (!userStorage.existsById(userId)) {
@@ -88,6 +89,7 @@ public class MessageServiceImpl implements MessageService {
             return new Response<>(new ErrorMessage(msg), HttpStatus.BAD_REQUEST);
         }
 
+        // get users by ids and return only user info
         List<UserInfo> collect = userStorage
                 .findByIds(interlocutorsIds.toArray(new String[interlocutorsIds.size()]))
                 .stream()
