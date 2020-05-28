@@ -20,6 +20,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void sendNotification(Notification notification) {
         try {
+            logger.info("send");
             jLupinClientChannelUtil.putNextElementToStreamChannel(channelId, notification);
         } catch (JLupinClientChannelUtilException e) {
             logger.error("Cannot put element to {}.", channelId);
